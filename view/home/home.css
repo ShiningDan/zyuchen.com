@@ -1,17 +1,23 @@
-* {padding: 0; margin: 0;}
+* {padding: 0; margin: 0; text-decoration: none;}
 body {font-size: 14px;}
 #header {position: fixed; top: 0; width: 270px;height: 100%;background-color: #BFD9EE;box-sizing: border-box;padding: 70px;}
 #avatar a {display: block;margin: -10px 0 0 -10px; height: 150px; width: 150px;  border-radius: 50%; background: url('./avatar.jpg');background-size: 100% 100%;}
 #header h1 {font-size: 24px; margin: 20px auto 10px;}
-#header a {text-decoration: none; color: #333;}
+#header a { color: #333;}
 #header > p {margin: 6px auto;color: #666;}
 #main-nav {margin-top: 40px}
 #main-nav ul {list-style: none;}
 #main-nav ul li{font-size: 16px;margin-top: 10px;}
 #content-wrap {margin-left: 270px;}
-#content {margin: 20px; padding: 20px; border-radius: 10px; background-color: #eee;}
+#content {margin: 20px; padding: 20px;}
 #content article {padding: 20px 0;border-bottom: 1px solid #ccc; position: relative;}
-.meta {position: absolute; top: 20px; right: 20px;}
+.meta {width: auto; float: right;}
 .title {font-size: 28px;}
 .post-content {margin-top: 20px;font-size: 16px; line-height: 1.6;}
-.post-content p a{display: inline-block; margin-top: 20px; text-decoration: none; color: #538ED5;}
+.post-content p a{display: inline-block; margin: 16px 0; text-decoration: none; color: #538ED5;}
+#page-nav {font-size: 16px; margin-top: 10px; color: #538ED5;}
+.prev {float: left; text-decoration: none; color: #538ED5;}
+.next {float: right; text-decoration: none; color: #538ED5;}
+.center {margin: 0 auto; text-align: center;}
+#footer {text-align: center; font-size: 12px; line-height: 1.6;margin: 20px 0;}
+#footer a {color: #538ED5;}
