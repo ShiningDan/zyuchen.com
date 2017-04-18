@@ -1,7 +1,6 @@
 {
   "name": "new-blog",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,10 +9,14 @@
     "type": "git",
     "url": "git+https://github.com/ShiningDan/new-blog.git"
   },
-  "author": "",
+  "author": "ShiningDan",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ShiningDan/new-blog/issues"
   },
-  "homepage": "https://github.com/ShiningDan/new-blog#readme"
+  "homepage": "https://github.com/ShiningDan/new-blog#readme",
+  "description": "",
+  "devDependencies": {
+    "marked": "^0.3.6"
+  }
 }
