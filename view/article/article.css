@@ -1,4 +1,6 @@
-* {padding: 0; margin: 0; text-decoration: none;}
+* {padding: 0; margin: 0;}
+a {text-decoration: none;}
+a:hover {cursor: pointer;}
 body {font-size: 14px;}
 #header {position: fixed; top: 0; bottom: 0; width: 270px;box-sizing: border-box;padding: 70px; background-color: #99C6B9;}
 #avatar a {display: block;margin: -10px 0 0 -10px; height: 150px; width: 150px; border-radius: 50%; background: url('./avatar.jpg');background-size: 100% 100%;}
@@ -10,13 +12,30 @@ body {font-size: 14px;}
 #main-nav ul li{font-size: 16px;margin-top: 10px;}
 #content-wrap {margin-left: 270px;}
 #content {padding: 0 40px;}
-#content article {padding: 20px 0;border-bottom: 1px solid #ccc; position: relative;}
+
+#content {color: #444; font-size: 16px; line-height: 1.6; word-wrap: break-word;}
+#content h1 {color: #333; font-size: 2rem; font-weight: 400; line-height: 35px;}
+#content h2 {font-size: 1.6rem;}
+#content h3 {font-size: 1.4rem;}
+#content h4 {font-size: 1.1rem;}
+#content h5, #content h6 {font-size: 1.0rem;}
+#content ol, #content ul, #content dl {margin-left: 25px;}
+#content li {font-size: 96%;}
+#content p, #content h2, #content h3, #content h4, #content h5, #content h6, #content ol, #content ul, #content dl, #conent blockquote, #content pre  {margin-top: 15px;}
+#content a {color: #538ED5;}
+#content a:hover {text-decoration: underline;}
+#content pre {background-color: #f8f8f8; border-left: 5px solid #ccc; color: #666; font-size: 14px; line-height: 1.6; overflow: hidden; padding: 0.6rem; position: relative; white-space: pre-wrap; word-break: break-word; word-wrap: break-word;}
+#content code {background-color: #eee; border-radius: 5px;font-size: 90%; margin: 0 2px; padding: 2px 5px; vertical-align: middle;}
+#content pre code {background-color: transparent; border-radius: 0; font-size: 100%; margin: 0; padding: 0;}
+#content img {border: 1px solid #ccc; display: block; margin: 10px 5px; max-width: 100%;}
+
 .meta {width: auto; float: right;}
 .title {font-size: 28px;}
-#page-nav {font-size: 16px; margin-top: 10px; color: #538ED5;}
+#page-nav {font-size: 16px; margin-top: 20px; color: #538ED5; border-top: 1px solid #ccc; padding-top: 20px;}
 .prev {float: left; text-decoration: none; color: #538ED5;}
 .next {float: right; text-decoration: none; color: #538ED5;}
 .center {margin: 0 auto; text-align: center;}
+.center a {color: #538ED5;}
 #footer {text-align: center; font-size: 12px; line-height: 1.6;margin: 20px 0;}
 #footer a {color: #538ED5;}
 @media screen and (max-width: 1024px) {

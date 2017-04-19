@@ -17,6 +17,7 @@
   "homepage": "https://github.com/ShiningDan/new-blog#readme",
   "description": "",
   "devDependencies": {
+    "express": "^4.15.2",
     "marked": "^0.3.6"
   }
 }
