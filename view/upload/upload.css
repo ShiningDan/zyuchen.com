@@ -1,7 +1,7 @@
 * {padding: 0; margin: 0; }
 a {text-decoration: none;}
 a:hover {cursor: pointer;}
-body {font-size: 14px;}
+body {font-size: 16px;}
 #header {position: fixed; top: 0; bottom: 0; width: 270px;box-sizing: border-box;padding: 70px; background-color: #99C6B9;}
 #avatar a {display: block;margin: -10px 0 0 -10px; height: 150px; width: 150px; border-radius: 50%; background: url('./avatar.jpg');background-size: 100% 100%;}
 #header h1 {font-size: 24px; margin: 20px auto 10px;}
@@ -13,14 +13,20 @@ body {font-size: 14px;}
 #content-wrap {margin-left: 270px;}
 #content {padding: 0 40px;}
 
+.form-group {margin-top: 15px;}
+.form-group label {text-align: right; padding-top: 7px; width: 15%; float: left;}
+.form-group input[type='text'] {width: 80%; height: 24px; padding: 6px 12px; line-height: 1.4; border: 1px solid #ccc; font-size: 16px;}
+.form-group textarea {width: 80%; height: 300px; overflow-y:auto;line-height: 1.4; border: 1px solid #ccc; font-size: 16px;padding: 6px 12px;}
 
-
+ 
 #footer {text-align: center; font-size: 12px; line-height: 1.6;margin: 20px 0;}
 #footer a {color: #538ED5;}
 @media screen and (max-width: 1024px) {
     #header {width: 210px; padding: 70px 40px;}
     #content-wrap {margin-left: 210px;}
     #content {padding: 0 20px;}
+
+    .form-group label {width: 100%;text-align: left;}
 }
 @media screen and (max-width: 640px) {
     #header {position: relative; width: 100%; text-align: center; padding-bottom: 20px;}
@@ -32,4 +38,5 @@ body {font-size: 14px;}
     #main-nav ul {overflow: hidden; display: inline-block; text-align: center;}
     #main-nav ul li{float: left; margin: 0 16px;}
     #content-wrap {margin-left: 0;}
+    
 }

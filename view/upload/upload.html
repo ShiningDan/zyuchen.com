@@ -29,16 +29,22 @@
         <div id="content">
             <form method="POST" action="/admin/movie/new">
                 <div class="form-group">
-                    <label for="title">文章标题</label>
+                    <label for="title">文章标题 ：</label>
                     <input type="text" name="title" value="" id="title">
                 </div>
                 <div class="form-group">
-                    <label for="tag">文章标签</label>
+                    <label for="tag">文章标签 ：</label>
                     <input type="text" name="tag" value="" id="tag">
                 </div>
                 <div class="form-group">
-                    <label for="article">文章正文</label>
-                    <input type="text" name="article" value="" id="article">
+                    <label for="abstract">文章摘要 ：</label>
+                    <!--<input type="text" name="abstract" value="" id="abstract">-->
+                    <textarea rows="" cols="" name="abstract" id="abstract"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="article">文章正文 ：</label>
+                    <!--<input type="text" name="article" value="" id="article">-->
+                    <textarea rows="" cols="" name="article" id="article"></textarea>
                 </div>
             </form>
         </div>
