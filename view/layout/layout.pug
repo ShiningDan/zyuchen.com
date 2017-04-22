@@ -1,15 +1,11 @@
-<!DOCTYPE html>
+doctype html
 html(lang="en")
-head
-  meta(charset="UTF-8")
-  meta(name="viewport", content="width=device-width, initial-scale=1.0")
-  meta(http-equiv="X-UA-Compatible", content="ie=edge")
-  title Yuchen 的主页
-  link(rel='stylesheet', href='../layout/layout.css')
-body
-  include ../header/header
-  #content-wrap
-    #content
-      block content
-      include ../page-nav/page-nav
-    include ../footer/footer
+  head
+    include ../head/head
+  body
+    include ../header/header
+    #content-wrap
+      #content
+        block content
+        include ../page-nav/page-nav
+      include ../footer/footer
