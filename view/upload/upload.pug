@@ -1,0 +1,17 @@
+extends ../layout/layout
+
+block content
+  link(href="../upload/upload.css", rel="stylesheet")
+  form(method="POST", action="/admin/movie/new")
+    .form-group
+      label(for='title')  文章标题 ：
+      input(type="text", name="title", id="title")
+    .form-group
+      label(for='tag')  文章标签 ：
+      input(type="text", name="tag", id="tag")
+    .form-group
+      label(for='abstract')  文章摘要 ：     
+      textarea(name="abstract", id="abstract")
+    .form-group
+      label(for='article')  文章摘要 ：     
+      textarea(name="article", id="article")

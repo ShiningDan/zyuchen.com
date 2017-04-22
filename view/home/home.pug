@@ -1,0 +1,17 @@
+extends ../layout/layout
+
+mixin article(title, sub, date, comments, more)
+  article.post
+    .meta
+      .date= date
+      .comments= comments
+    h1.title= title
+    .post-content
+      p.sub= sub
+      p
+        a(href='')= more
+
+block content
+  link(href="../home/home.css", rel="stylesheet")
+  each article in articles
+    +article(article.title, article.sub, article.date, article.comments, article.more)

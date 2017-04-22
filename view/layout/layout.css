@@ -1,0 +1,14 @@
+* {padding: 0; margin: 0; }
+a {text-decoration: none;}
+a:hover {cursor: pointer;}
+body {font-size: 14px;}
+#content-wrap {margin-left: 270px;}
+#content {padding: 0 40px;}
+#content a:hover {text-decoration: underline;}
+@media screen and (max-width: 1024px) {
+  #content-wrap {margin-left: 210px;}
+  #content {padding: 0 20px;}
+}
+@media screen and (max-width: 640px) {
+  #content-wrap {margin-left: 0;}
+}
