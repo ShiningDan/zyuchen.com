@@ -1,26 +1,29 @@
 extends ../layout/layout
 
 block content
-  link(href="../upload/upload.css", rel="stylesheet")
-  link(rel="stylesheet", href="../lib/simplemde/dist/simplemde.min.css")
-  script(src="../lib/simplemde/dist/simplemde.min.js")
+  link(href="/upload/upload.css", rel="stylesheet")
+  link(rel="stylesheet", href="/lib/simplemde/dist/simplemde.min.css")
+  script(src="/lib/simplemde/dist/simplemde.min.js")
   form(method="POST", action="/admin/upload/new")
     .form-group
       label(for='title')  文章标题 ：
-      input(type="text", name="upload[title]", id="title")
+      input(type="text", name="upload[title]", id="title" value=article.title)
     .form-group
       label(for='categories')  文章标签 ：
-      input(type="text", name="upload[categories]", id="categories")
+      if article.categories
+        input(type="text", name="upload[categories]", id="categories" value=article.categories.join(" ") )
+      else
+        input(type="text", name="upload[categories]", id="categories" value=article.categories)     
     .form-group
       label(for='abstract')  文章摘要 ：     
-      textarea(name="upload[abstract]", id="abstract")
+      textarea(name="upload[abstract]", id="abstract" ) #{abstract.abstract}
     .form-group
       label(for='link')  文章链接 ：
-      input(type="text", name="upload[link]", id="link")
+      input(type="text", name="upload[link]", id="link" value=article.link)
     .form-group
       label(for='article')  文章正文 ：  
       .mde   
-        textarea#mde(name="upload[content]")
+        textarea#mde(name="upload[content]" data-value=article.md)
       //- textarea(name="article", id="article")
     .form-group
       button(type='submit')  录入

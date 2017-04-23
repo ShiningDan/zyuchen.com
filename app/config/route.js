@@ -1,5 +1,6 @@
 let Home = require('../controllers/home');
 let Upload = require('../controllers/upload');
+// let Admin = require('../controllers/admin');
 
 module.exports = function(app) {
 
@@ -9,4 +10,6 @@ module.exports = function(app) {
   // admin
   app.get('/admin/upload', Upload.upload);
   app.post('/admin/upload/new', Upload.save);
+  app.get('/admin/update/:id', Upload.update);
+  app.get('/admin/upload/list', Upload.list);
 } 

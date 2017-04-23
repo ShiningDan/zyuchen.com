@@ -18,6 +18,7 @@ app.use(express.static(path.join(__dirname, './view')));       // 需要将./vie
 app.use(express.static(path.join(__dirname, './www/static'))); // 将 ./www/static 添加到静态资源目录中
 app.use(bodyParser.urlencoded({extended: true}));          // 查看 body-parser 的配置
 
+app.locals.moment = require('moment');
 
 app.listen(port);
 

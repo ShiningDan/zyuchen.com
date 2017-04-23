@@ -1,17 +1,14 @@
 extends ../layout/layout
 
-mixin abstract(title, abstract, date, comments, link)
-  article.post
-    .meta
-      .date= date
-      .comments= comments
-    h1.title= title
-    .post-content
-      p.abstract= abstract
-      p
-        a(href= link) 继续阅读...
-
 block content
-  link(href="../home/home.css", rel="stylesheet")
+  link(href="/home/home.css", rel="stylesheet")
   each abstract in abstracts
-    +abstract(abstract.title, abstract.abstract, abstract.date, abstract.comments, abstract.link)
+    article.post
+      .meta
+        .date= moment(abstract.meta.createAt).format('YYYY-MM-DD')
+        .comments= abstract.comments
+      h1.title= abstract.title
+      .post-content
+        p.abstract= abstract.abstract
+        p
+          a(href= abstract.link) 继续阅读...

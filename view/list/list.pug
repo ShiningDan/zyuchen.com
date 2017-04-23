@@ -1,0 +1,26 @@
+extends ../layout/layout
+
+block content
+  link(href="/list/list.css", rel="stylesheet")
+  .container
+    table
+      thead
+        tr
+          th 文章标题
+          th 文章标签
+          th 创建时间
+          th 修改时间
+          th 查看
+          th 修改
+          th 删除
+      tbody
+        each article in articles
+          tr
+            td #{article.title}
+            td #{article.categories}
+            td #{moment(article.meta.createAt).format('YYYY-MM-DD')}
+            td #{moment(article.meta.updateAt).format('YYYY-MM-DD')}
+            td: a(target='_blank', href= article.link) 查看
+            td: a(target='_blank', href='/admin/update/'+article._id) 修改
+            td
+              button(data-id= article._id) 删除
