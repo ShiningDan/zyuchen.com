@@ -1,0 +1,20 @@
+{
+  "name": "new-blog",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "ShiningDan"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/ShiningDan/new-blog",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "simplemde": "^1.11.2"
+  }
+}

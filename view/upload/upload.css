@@ -1,8 +1,9 @@
 
-.form-group {margin-top: 15px;}
+.form-group {margin-top: 15px;overflow: hidden;}
 .form-group label {text-align: right; padding-top: 7px; width: 15%; float: left;}
 .form-group input[type='text'] {width: 80%; height: 24px; padding: 6px 12px; line-height: 1.4; border: 1px solid #ccc; font-size: 16px;}
 .form-group textarea {width: 80%; height: 300px; overflow-y:auto;line-height: 1.4; border: 1px solid #ccc; font-size: 16px;padding: 6px 12px;}
+.form-group .mde {width: 82%; float: left;}
 @media screen and (max-width: 1024px) {
     .form-group label {width: 100%;text-align: left;}
 }

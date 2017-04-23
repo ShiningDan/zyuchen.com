@@ -1,6 +1,6 @@
 extends ../layout/layout
 
-mixin article(title, sub, date, comments, more)
+mixin abstract(title, sub, date, comments, more)
   article.post
     .meta
       .date= date
@@ -13,5 +13,5 @@ mixin article(title, sub, date, comments, more)
 
 block content
   link(href="../home/home.css", rel="stylesheet")
-  each article in articles
-    +article(article.title, article.sub, article.date, article.comments, article.more)
+  each abstract in abstracts
+    +abstract(abstract.title, abstract.sub, abstract.date, abstract.comments, abstract.more)
