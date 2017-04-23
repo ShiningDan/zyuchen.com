@@ -3,11 +3,11 @@ a {text-decoration: none;}
 a:hover {cursor: pointer;}
 body {font-size: 14px;}
 #content-wrap {margin-left: 270px;}
-#content {padding: 0 40px;}
+#content {padding: 40px 40px 0;}
 #content a:hover {text-decoration: underline;}
 @media screen and (max-width: 1024px) {
   #content-wrap {margin-left: 210px;}
-  #content {padding: 0 20px;}
+  #content {padding: 40px 20px 0;}
 }
 @media screen and (max-width: 640px) {
   #content-wrap {margin-left: 0;}

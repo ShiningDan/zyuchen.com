@@ -1,5 +1,6 @@
 let Article = require('../models/article');
 let Abstract = require('../models/abstract');
+let marked = require('marked');
 
 exports.upload = function(req, res) {
   res.render('./upload/upload', {
@@ -15,7 +16,8 @@ exports.save = function(req, res) {
   let uploadObj = req.body.upload;
   let article = {
     title: uploadObj.title,
-    content: uploadObj.content,
+    content: marked(uploadObj.content),
+    md: uploadObj.content,
     link: '/post/' + uploadObj.link,
     comments: [],
     categories: uploadObj.categories.split(' '),
@@ -30,7 +32,7 @@ exports.save = function(req, res) {
     let abstract = {
       title: uploadObj.title,
       abstract: uploadObj.abstract,
-      link: '/post' + uploadObj.link,
+      link: '/post/' + uploadObj.link,
       comments: [],
       categories: uploadObj.categories.split(' '),
     };
@@ -40,6 +42,7 @@ exports.save = function(req, res) {
         console.log(err);
       }
       console.log('abstract saved');
+      res.redirect(abstract.link);
     })
   })
   
