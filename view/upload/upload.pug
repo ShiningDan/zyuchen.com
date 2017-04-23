@@ -4,19 +4,24 @@ block content
   link(href="../upload/upload.css", rel="stylesheet")
   link(rel="stylesheet", href="../lib/simplemde/dist/simplemde.min.css")
   script(src="../lib/simplemde/dist/simplemde.min.js")
-  form(method="POST", action="/admin/movie/new")
+  form(method="POST", action="/admin/upload/new")
     .form-group
       label(for='title')  文章标题 ：
-      input(type="text", name="title", id="title")
+      input(type="text", name="upload[title]", id="title")
     .form-group
-      label(for='tag')  文章标签 ：
-      input(type="text", name="tag", id="tag")
+      label(for='categories')  文章标签 ：
+      input(type="text", name="upload[categories]", id="categories")
     .form-group
       label(for='abstract')  文章摘要 ：     
-      textarea(name="abstract", id="abstract")
+      textarea(name="upload[abstract]", id="abstract")
+    .form-group
+      label(for='link')  文章链接 ：
+      input(type="text", name="upload[link]", id="link")
     .form-group
       label(for='article')  文章正文 ：  
       .mde   
-        textarea#mde
+        textarea#mde(name="upload[content]")
       //- textarea(name="article", id="article")
+    .form-group
+      button(type='submit')  录入
   script(src='/js/upload.js')

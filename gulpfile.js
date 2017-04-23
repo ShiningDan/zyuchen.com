@@ -25,14 +25,14 @@ gulp.task('browser-sync', ['nodemon'], function() {
       // files: ["./**/*.*"],
       browser: "google chrome",
       port: 7000,
-      // rewriteRules: [
-      //   {
-      //       match: /Content-Security-Policy/,
-      //       fn: function (match) {
-      //           return "DISABLED-Content-Security-Policy";
-      //       }
-      //   }
-      // ],
+      rewriteRules: [
+        {
+            match: /Content-Security-Policy/,
+            fn: function (match) {
+                return "DISABLED-Content-Security-Policy";
+            }
+        }
+      ],
   })
 })
 

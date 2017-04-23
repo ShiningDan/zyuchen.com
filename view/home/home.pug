@@ -1,17 +1,17 @@
 extends ../layout/layout
 
-mixin abstract(title, sub, date, comments, more)
+mixin abstract(title, abstract, date, comments, link)
   article.post
     .meta
       .date= date
       .comments= comments
     h1.title= title
     .post-content
-      p.sub= sub
+      p.abstract= abstract
       p
-        a(href='')= more
+        a(href= link) 继续阅读...
 
 block content
   link(href="../home/home.css", rel="stylesheet")
   each abstract in abstracts
-    +abstract(abstract.title, abstract.sub, abstract.date, abstract.comments, abstract.more)
+    +abstract(abstract.title, abstract.abstract, abstract.date, abstract.comments, abstract.link)

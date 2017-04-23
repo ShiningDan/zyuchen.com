@@ -1,16 +1,16 @@
 let mongoose = require("mongoose");
 let Schema = mongoose.Schema;
 
-let AbstractSchema = new Schema({
+let ArticleSchema = new Schema({
   title: String,
-  abstract: String,
+  content: String,
   link: String,
   comments: [{
     type: String,
-  }],                     // should be ref
+  }],                 // should be ref
   categories: [{
     type: String,
-  }],                     // should be ref
+  }],                 // should be ref
   meta: {
     createAt: {
       type: Date,
@@ -23,7 +23,7 @@ let AbstractSchema = new Schema({
   }
 });
 
-AbstractSchema.pre('save', function(next) {
+ArticleSchema.pre('save', function(next) {
   if (this.isNew) {
     this.meta.createAt = this.meta.updateAt = Date.now();
   } else {
@@ -32,4 +32,4 @@ AbstractSchema.pre('save', function(next) {
   next();
 });
 
-module.exports = AbstractSchema;
+module.exports = ArticleSchema;
