@@ -25,6 +25,12 @@ exports.save = function(req, res) {
       if (err) {
         console.log(err);
       }
+      uploadObj.categories = uploadObj.categories.split(' ').filter(function(obj) {
+          obj = obj.trim();
+          if (obj !== "") {
+            return obj;
+          }
+      });
       uploadObj.md = uploadObj.content;
       uploadObj.content = marked(uploadObj.content);
       //更新 article 并且存入到数据库，替代原来的 article
@@ -38,6 +44,7 @@ exports.save = function(req, res) {
             console.log(err);
           }
           // 更新 abstract 并且存入到数据库，替代原来的 abstract
+          let oldCategories = abstract.categories;
           let _abstract = underScore.extend(abstract, {
             title: uploadObj.title,
             abstract: uploadObj.abstract,
@@ -49,7 +56,71 @@ exports.save = function(req, res) {
               console.log(err);
             }
 
-            // 创建或更新 category
+            // 更新 category
+            // 新的 category 不在旧的 oldCategories 中
+            abstract.categories.forEach(function(cate) {
+              // 如果更新的 category 不在原有 category 里面
+              if (oldCategories.indexOf(cate) === -1) {
+                // 则创建新的 category 或者在新的 category 中添加文章链接
+                Category.findOne({name: cate}, function(err, category) {
+                  if (err) {
+                    console.log(err);
+                  }
+                  if (category) {
+                    // 如果新的 category 已经存在了，则将该文章添加到新的 category 中
+                    category.articles.push(article._id);
+                    category.save(function(err, c) {
+                      if (err) {
+                        console.log(err);
+                      }
+                      console.log('category:', c, 'updated');
+                    })
+                  } else {
+                    // 如果新的 category 不存在，则创建新的 category，并且将该文章添加进去
+                    let _category = new Category({
+                      name: cate,
+                      articles: [article._id],
+                    });
+                    _category.save(function(err, category) {
+                      if (err) {
+                        console.log(err);
+                      }
+                      console.log('category:', category, 'saved');
+                    })
+                  }
+                })
+              } 
+            })
+            // 如果 oldCategories 中的元素在修改以后被删去，则要从对应的 category 中删除该文章的链接
+            oldCategories.forEach(function(cate) {
+              // 如果 旧的 cate 不在新的里面
+              if (abstract.categories.indexOf(cate) === -1) {
+                // 则将文章从旧的 category 中删除
+                Category.findOne({name: cate}, function(err, category) {
+                  if (err) {
+                    console.log(err);
+                  }
+                  // 如果原有的 category 中只有一篇文章，则删掉这个 category
+                  if (category.articles.length === 1) {
+                    category.remove(function(err, c) {
+                      if (err) {
+                        console.log(err);
+                      }
+                      console.log('category', c, 'removed');
+                    })
+                  } else {
+                    // 如果有多篇文章，则删除该文章
+                    category.articles.splice(category.articles.indexOf(article._id), 1);
+                    category.save(function(err, c) {
+                      if (err) {
+                        console.log(err);
+                      }
+                      console.log('category', c, 'updated');
+                    })
+                  }
+                })
+              }
+            })
             res.redirect(abstract.link);
           })
         })
@@ -57,13 +128,20 @@ exports.save = function(req, res) {
     })
   } else {
     // 如果 id 不存在，即该文章是一篇新文章
+    uploadObj.categories = uploadObj.categories.split(' ').filter(function(obj) {
+        obj = obj.trim();
+        if (obj !== "") {
+          return obj;
+        }
+    });
+    console.log(uploadObj);
     let article = {
       title: uploadObj.title,
       content: marked(uploadObj.content),
       md: uploadObj.content,
       link: '/post/' + uploadObj.link,
       comments: [],
-      categories: uploadObj.categories.split(' '),
+      categories: uploadObj.categories,
     }
     // 首先创建 article，并且保存
     let _article = Article(article);
@@ -78,7 +156,7 @@ exports.save = function(req, res) {
         abstract: uploadObj.abstract,
         link: '/post/' + uploadObj.link,
         comments: [],
-        categories: uploadObj.categories.split(' '),
+        categories: uploadObj.categories,
       };
       // 其次创建 abstract，并且保存
       _abstract = Abstract(abstract);
@@ -90,16 +168,22 @@ exports.save = function(req, res) {
 
         // 最后创建 Category，并且保存
         let categories = abstract.categories;
-        console.log(categories);
         categories.forEach(function(cate) {
           Category.findOne({name: cate}, function(err, category) {
             if (err) {
               console.log(err);
             }
+            // 如果 category 已经存在了
             if (category) {
               category.articles.push(article._id);
-              console.log('category:', category.name, 'updated');
+              category.save(function(err, c) {
+                if (err) {
+                  console.log(err)
+                }
+                console.log('category:', c, 'updated');
+              })
             } else {
+              // 如果 categroy 不存在
               let _category =  new Category({
                 name: cate,
                 articles: [article._id],
@@ -107,8 +191,8 @@ exports.save = function(req, res) {
               _category.save(function(err, category) {
                 if (err) {
                   console.log(err);
-                  console.log('category:', category.name, 'saved');
                 }
+                console.log('category:', category.name, 'saved');
               })
             }
           })
