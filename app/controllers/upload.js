@@ -48,6 +48,8 @@ exports.save = function(req, res) {
             if (err) {
               console.log(err);
             }
+
+            // 创建或更新 category
             res.redirect(abstract.link);
           })
         })
@@ -100,7 +102,7 @@ exports.save = function(req, res) {
             } else {
               let _category =  new Category({
                 name: cate,
-                article: article._id,
+                articles: [article._id],
               });
               _category.save(function(err, category) {
                 if (err) {
