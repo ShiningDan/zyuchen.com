@@ -1,5 +1,6 @@
 let mongoose = require("mongoose");
 let Schema = mongoose.Schema;
+let ObjectId = Schema.Types.ObjectId;
 
 let ArticleSchema = new Schema({
   title: String,
@@ -11,7 +12,7 @@ let ArticleSchema = new Schema({
   }],                 // should be ref
   categories: [{
     type: String,
-  }],                 // should be ref
+  }],                
   meta: {
     createAt: {
       type: Date,

@@ -5,7 +5,7 @@ let ObjectId = Schema.Types.ObjectId;
 let CategorySchema = new Schema({
   name: String,
   articles: [{
-    type: Object,
+    type: ObjectId,
     ref: 'Article',
   }] ,                  // should be ref
   meta: {
@@ -29,4 +29,4 @@ CategorySchema.pre('save', function(next) {
   next();
 });
 
-module.exports = AbstractSchema;
+module.exports = CategorySchema;

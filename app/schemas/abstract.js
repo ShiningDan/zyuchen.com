@@ -1,5 +1,6 @@
 let mongoose = require("mongoose");
 let Schema = mongoose.Schema;
+let ObjectId = Schema.ObjectId;
 
 let AbstractSchema = new Schema({
   title: String,
@@ -9,8 +10,8 @@ let AbstractSchema = new Schema({
     type: String,
   }],                     // should be ref
   categories: [{
-    type: String,
-  }],                     // should be ref
+    type: String
+  }],                     
   meta: {
     createAt: {
       type: Date,
