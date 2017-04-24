@@ -9,7 +9,9 @@ module.exports = function(app) {
 
   // admin
   app.get('/admin/upload', Upload.upload);
-  app.post('/admin/upload/new', Upload.save);
   app.get('/admin/update/:id', Upload.update);
   app.get('/admin/list', Upload.list);
+  app.get('/admin/login', Upload.tologin);
+  app.post('/admin/upload/new', Upload.save);
+  // app.post('/admin/login', Upload.login);
 } 

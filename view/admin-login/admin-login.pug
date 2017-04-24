@@ -1,0 +1,15 @@
+extends ../layout/layout
+
+block content
+  link(href="/admin-login/admin-login.css", rel="stylesheet")
+  #login-wrap
+    #login
+      form(method="POST", action="/admin/login")    
+        .form-group
+          label(for="username") 用户名 ：
+          input(type="text", id="username", name="login[name]")
+        .form-group
+          label(for="password") 密码 ：
+          input(type="password", id="password", name="login[pass]")
+        .form-group
+          button(type="submit") 登录

@@ -134,7 +134,6 @@ exports.save = function(req, res) {
           return obj;
         }
     });
-    console.log(uploadObj);
     let article = {
       title: uploadObj.title,
       content: marked(uploadObj.content),
@@ -241,3 +240,13 @@ exports.update = function(req, res) {
     })
   })
 };
+
+exports.tologin = function(req, res) {
+  res.render('./admin-login/admin-login', {
+    "pageNav": {
+      "prev": "上一页",
+      "next": "下一页",
+      "center": "博客归档"
+    }
+  });
+}
