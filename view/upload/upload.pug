@@ -5,6 +5,7 @@ block content
   link(rel="stylesheet", href="/lib/simplemde/dist/simplemde.min.css")
   script(src="/lib/simplemde/dist/simplemde.min.js")
   form(method="POST", action="/admin/upload/new")
+    input(type='hidden', name='upload[_id]', value=article._id)
     .form-group
       label(for='title')  文章标题 ：
       input(type="text", name="upload[title]", id="title" value=article.title)

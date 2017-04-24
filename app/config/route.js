@@ -11,5 +11,5 @@ module.exports = function(app) {
   app.get('/admin/upload', Upload.upload);
   app.post('/admin/upload/new', Upload.save);
   app.get('/admin/update/:id', Upload.update);
-  app.get('/admin/upload/list', Upload.list);
+  app.get('/admin/list', Upload.list);
 } 

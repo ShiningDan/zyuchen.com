@@ -7,7 +7,7 @@ block content
       .meta
         .date= moment(abstract.meta.createAt).format('YYYY-MM-DD')
         .comments= abstract.comments
-      h1.title= abstract.title
+      h1.title: a(href=abstract.link)= abstract.title
       .post-content
         p.abstract= abstract.abstract
         p
