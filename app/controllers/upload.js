@@ -243,6 +243,7 @@ exports.update = function(req, res) {
 
 exports.tologin = function(req, res) {
   res.render('./admin-login/admin-login', {
+    tip: '请输入账号和密码',
     "pageNav": {
       "prev": "上一页",
       "next": "下一页",
@@ -250,3 +251,35 @@ exports.tologin = function(req, res) {
     }
   });
 }
+
+
+exports.login = function(req, res) {
+  let login = req.body.login;
+  let name = login.name;
+  let pass = login.pass;
+  if (name === "zhangyuchen" && pass === "123456") {
+    req.session.user = name;
+    Article.find({}, function(err, articles) {
+      if (err) {
+        console.log(err);
+      }
+      res.render('./list/list', {
+        articles: articles,
+        "pageNav": {
+          "prev": "上一页",
+          "next": "下一页",
+          "center": "博客归档"
+        }
+      })
+    })
+  } else {
+    res.render('./admin-login/admin-login', {
+      tip: '输入的密码有误',
+      "pageNav": {
+        "prev": "上一页",
+        "next": "下一页",
+        "center": "博客归档"
+      }
+    });
+  }
+};
