@@ -283,3 +283,47 @@ exports.login = function(req, res) {
     });
   }
 };
+
+exports.delete = function(req, res) {
+  let _id = req.query.id;
+  Article.findById(_id, function(err, article) {
+    if (err) {
+      console.log(err);
+    }
+    // 删除该文章
+    article.remove(function(err, article) {
+      Abstract.findOne({link: article.link}, function(err, abstract) {
+        // 删除该简介
+        abstract.remove(function(err, abstract) {
+          // 删除对应分类中文章的信息。
+          let errflag = false;
+          article.categories.forEach(function(cate) {
+            Category.findOne({name: cate}, function(err, category) {
+              // 如果该分类只有一篇文章，则删除该分类
+              if (category.articles.length === 1) {
+                category.remove(function(err, c) {
+                  if (err) {
+                    console.log(err);
+                    errflag = true;
+                  }
+                })
+              } else {
+                // 如果有多篇文章，则删除该文章的信息
+                category.articles.splice(category.articles.indexOf(article._id), 1);
+                category.save(function(err, c) {
+                  if (err) {
+                    console.log(err)
+                    errflag = true;
+                  }
+                })
+              }
+            })
+          })
+          if (!errflag) {
+            res.json({success: 1});
+          }
+        })
+      })
+    })
+  })
+}

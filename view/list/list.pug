@@ -15,7 +15,7 @@ block content
           th 删除
       tbody
         each article in articles
-          tr
+          tr(id='item-id-'+article._id)
             td #{article.title}
             td #{article.categories}
             td #{moment(article.meta.createAt).format('YYYY-MM-DD')}
@@ -23,4 +23,6 @@ block content
             td: a(target='_blank', href= article.link) 查看
             td: a(target='_blank', href='/admin/update/'+article._id) 修改
             td
-              button(data-id= article._id) 删除
+              button.del(data-id= article._id) 删除
+  script(src="/js/admin.js")
+  

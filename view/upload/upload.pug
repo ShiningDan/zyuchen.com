@@ -8,19 +8,19 @@ block content
     input(type='hidden', name='upload[_id]', value=article._id)
     .form-group
       label(for='title')  文章标题 ：
-      input(type="text", name="upload[title]", id="title" value=article.title)
+      input(type="text", name="upload[title]", id="title" value=article.title, required=true)
     .form-group
       label(for='categories')  文章标签 ：
       if article.categories
         input(type="text", name="upload[categories]", id="categories" value=article.categories.join(" ") )
       else
-        input(type="text", name="upload[categories]", id="categories" value=article.categories)     
+        input(type="text", name="upload[categories]", id="categories" value=article.categories, required=true)     
     .form-group
       label(for='abstract')  文章摘要 ：     
-      textarea(name="upload[abstract]", id="abstract" ) #{abstract.abstract}
+      textarea(name="upload[abstract]", id="abstract", required=true ) #{abstract.abstract}
     .form-group
       label(for='link')  文章链接 ：
-      input(type="text", name="upload[link]", id="link" value=article.link)
+      input(type="text", name="upload[link]", id="link" value=article.link, required=true)
     .form-group
       label(for='article')  文章正文 ：  
       .mde   
