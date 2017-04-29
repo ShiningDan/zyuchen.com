@@ -2,6 +2,7 @@ let Article = require('../models/article');
 let Abstract = require('../models/abstract');
 let Category = require('../models/category');
 let marked = require('marked');
+let markdownToc = require('markdown-toc');
 let underScore = require('underscore');            // 查看 underscore 的使用方法
 
 exports.upload = function(req, res) {
@@ -32,7 +33,8 @@ exports.save = function(req, res) {
           }
       });
       uploadObj.md = uploadObj.content;
-      uploadObj.content = marked(uploadObj.content);
+      let markdowntocdiv = '<div id="toc"><header>文章目录</header>' + marked(markdownToc(uploadObj.content).content) + '</div>';
+      uploadObj.content = markdowntocdiv + marked(uploadObj.content);
       //更新 article 并且存入到数据库，替代原来的 article
       let _article = underScore.extend(article, uploadObj);
       _article.save(function(err, article) {
@@ -136,12 +138,16 @@ exports.save = function(req, res) {
     });
     let article = {
       title: uploadObj.title,
-      content: marked(uploadObj.content),
       md: uploadObj.content,
       link: '/post/' + uploadObj.link,
       comments: [],
       categories: uploadObj.categories,
     }
+
+    let markdowntocdiv = '<div id="toc"><header>文章目录</header>' + marked(markdownToc(uploadObj.content).content) + '</div>';
+    console.log(markdownToc(article.content).content);
+    article.content = markdowntocdiv + marked(uploadObj.content);
+
     // 首先创建 article，并且保存
     let _article = Article(article);
     _article.save(function(err, article) {

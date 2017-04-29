@@ -13,3 +13,6 @@
 #content code {background-color: #eee; border-radius: 5px;font-size: 90%; margin: 0 2px; padding: 2px 5px; vertical-align: middle;}
 #content pre code {background-color: transparent; border-radius: 0; font-size: 100%; margin: 0; padding: 0;}
 #content img {border: 1px solid #ccc; display: block; margin: 10px 5px; max-width: 100%;}
+#toc {float: right; border: 1px solid #ccc; padding: 10px; max-width: 260px; min-width: 120px; font-size: 14px; margin: 0 0 15px 20px;}
+#toc ul{margin-left: 14px;}
+#toc>header{text-align: center; font-size: 16px; border-bottom: 1px solid #ccc; margin: -6px 0 6px;}
