@@ -16,3 +16,6 @@
 #toc {float: right; border: 1px solid #ccc; padding: 10px; max-width: 260px; min-width: 120px; margin: 0 0 15px 20px;}
 #toc ul{margin-left: 14px; font-size: 16px;}
 #toc>header{text-align: center; font-size: 16px; border-bottom: 1px solid #ccc; margin: -6px 0 6px;}
+@media screen and (max-width: 640px) {
+    #toc {float: none; box-sizing: 100%; max-width: 100%; margin: 0 0 20px;}
+}
