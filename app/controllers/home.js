@@ -1,5 +1,6 @@
 let Abstract = require('../models/abstract');
 let Article = require('../models/article');
+let utility = require('utility');
 
 exports.home = function(req, res) {
   Abstract.find({})
@@ -24,6 +25,7 @@ exports.article = function(req, res) {
     }
     res.render('./article/article', {
       content: article.content,
+      sid: utility.md5(article.link),
       "pageNav": {
         "prev": "上一页",
         "next": "下一页",
