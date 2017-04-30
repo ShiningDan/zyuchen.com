@@ -16,6 +16,12 @@ block content
       else
         input(type="text", name="upload[categories]", id="categories" value=article.categories, required=true)     
     .form-group
+      label(for='createAt')  创建时间 ：
+      input(type="date" name="upload[createAt]", id="createAt")
+    .form-group
+      label(for='updateAt')  修改时间 ：
+      input(type="date" name="upload[updateAt]", id="updateAt")
+    .form-group
       label(for='abstract')  文章摘要 ：     
       textarea(name="upload[abstract]", id="abstract", required=true ) #{abstract.abstract}
     .form-group

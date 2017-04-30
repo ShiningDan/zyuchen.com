@@ -26,9 +26,15 @@ let AbstractSchema = new Schema({
 
 AbstractSchema.pre('save', function(next) {
   if (this.isNew) {
-    this.meta.createAt = this.meta.updateAt = Date.now();
+    // the value number of time set by user ending with 100000          
+    if (this.meta.createAt.valueOf()%100000 !== 0) {
+      this.meta.createAt = Date.now();
+    }
+    if (this.meta.updateAt.valueOf()%100000 !== 0) {
+      this.meta.updateAt = Date.now();
+    }
   } else {
-    this.meta.updateAt = Date.now();
+      this.meta.updateAt = Date.now();
   }
   next();
 });

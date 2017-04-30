@@ -35,8 +35,21 @@ exports.save = function(req, res) {
       uploadObj.md = uploadObj.content;
       let markdowntocdiv = '<div id="toc"><header>文章目录</header>' + marked(markdownToc(uploadObj.content).content) + '</div>';
       uploadObj.content = markdowntocdiv + marked(uploadObj.content);
+
       //更新 article 并且存入到数据库，替代原来的 article
       let _article = underScore.extend(article, uploadObj);
+
+      let createAt = new Date(uploadObj.createAt);
+      let updateAt = new Date(uploadObj.updateAt);
+
+      if (!Number.isNaN(createAt.valueOf())) {
+        _article.meta.createAt = createAt;
+      }
+
+      if (!Number.isNaN(updateAt.valueOf())) {
+        _article.meta.updateAt = updateAt;
+      }
+
       _article.save(function(err, article) {
         if (err) {
           console.log(err);
@@ -53,6 +66,15 @@ exports.save = function(req, res) {
             link: abstract.link,
             categories: uploadObj.categories,
           }); 
+
+          if (!Number.isNaN(createAt.valueOf())) {
+            _abstract.meta.createAt = createAt;
+          }
+
+          if (!Number.isNaN(updateAt.valueOf())) {
+            _abstract.meta.updateAt = updateAt;
+          }
+
           _abstract.save(function(err, abstract) {
             if (err) {
               console.log(err);
@@ -136,6 +158,10 @@ exports.save = function(req, res) {
           return obj;
         }
     });
+
+    let createAt = new Date(uploadObj.createAt);
+    let updateAt = new Date(uploadObj.updateAt);
+
     let article = {
       title: uploadObj.title,
       md: uploadObj.content,
@@ -145,11 +171,19 @@ exports.save = function(req, res) {
     }
 
     let markdowntocdiv = '<div id="toc"><header>文章目录</header>' + marked(markdownToc(uploadObj.content).content) + '</div>';
-    console.log(markdownToc(article.content).content);
     article.content = markdowntocdiv + marked(uploadObj.content);
 
     // 首先创建 article，并且保存
     let _article = Article(article);
+
+    if (!Number.isNaN(createAt.valueOf())) {
+      _article.meta.createAt = createAt;
+    }
+
+    if (!Number.isNaN(updateAt.valueOf())) {
+      _article.meta.updateAt = updateAt;
+    }
+    
     _article.save(function(err, article) {
       if (err) {
         console.log(err);
@@ -165,6 +199,15 @@ exports.save = function(req, res) {
       };
       // 其次创建 abstract，并且保存
       _abstract = Abstract(abstract);
+
+      if (!Number.isNaN(createAt.valueOf())) {
+        _abstract.meta.createAt = createAt;
+      }
+
+      if (!Number.isNaN(updateAt.valueOf())) {
+        _abstract.meta.updateAt = updateAt;
+      }
+
       _abstract.save(function(err, abstract) {
         if (err) {
           console.log(err);
