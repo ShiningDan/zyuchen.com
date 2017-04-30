@@ -17,10 +17,10 @@ block content
         input(type="text", name="upload[categories]", id="categories" value=article.categories, required=true)     
     .form-group
       label(for='createAt')  创建时间 ：
-      input(type="date" name="upload[createAt]", id="createAt")
+      input(type="date" name="upload[createAt]", id="createAt", value=moment(abstract.meta.createAt).format('YYYY-MM-DD'))
     .form-group
       label(for='updateAt')  修改时间 ：
-      input(type="date" name="upload[updateAt]", id="updateAt")
+      input(type="date" name="upload[updateAt]", id="updateAt", value=moment(abstract.meta.updateAt).format('YYYY-MM-DD'))
     .form-group
       label(for='abstract')  文章摘要 ：     
       textarea(name="upload[abstract]", id="abstract", required=true ) #{abstract.abstract}
