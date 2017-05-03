@@ -3,10 +3,23 @@ let Article = require('../models/article');
 let utility = require('utility');
 
 exports.home = function(req, res) {
+  let pn = req.query.pn;
+  let pageNavPn = {
+    prev: undefined,
+    next: undefined,
+  };
+  if (pn === undefined) {
+    pageNavPn.next = '?pn=' + 2;
+  } else {
+    pn = parseInt(pn);
+    pageNavPn.prev = '?pn=' + (pn-1 >= 1 ? pn-1 : 1);
+    pageNavPn.next = '?pn=' + (pn+1);
+  }
   Abstract.find({})
   .exec(function(err, abstracts) {
     res.render('./home/home', {
       "abstracts": abstracts,
+      "pageNavPn": pageNavPn,
       "pageNav": {
         "prev": "上一页",
         "next": "下一页",

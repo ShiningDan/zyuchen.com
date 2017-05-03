@@ -8,12 +8,7 @@ let underScore = require('underscore');            // 查看 underscore 的使�
 exports.upload = function(req, res) {
   res.render('./upload/upload', {
     article: {},
-    abstract: {},
-    "pageNav": {
-      "prev": "上一页",
-      "next": "下一页",
-      "center": "博客归档"
-    }
+    abstract: {}
   });
 };
 
@@ -257,12 +252,7 @@ exports.list = function(req, res) {
       console.log(err);
     }
     res.render('./list/list', {
-      articles: articles,
-      "pageNav": {
-        "prev": "上一页",
-        "next": "下一页",
-        "center": "博客归档"
-      }
+      articles: articles
     })
   })
 };
@@ -279,12 +269,7 @@ exports.update = function(req, res) {
       }
       res.render('./upload/upload', {
         article: article,
-        abstract: abstract,
-        "pageNav": {
-          "prev": "上一页",
-          "next": "下一页",
-          "center": "博客归档"
-        }
+        abstract: abstract
       });
     })
   })
@@ -292,12 +277,7 @@ exports.update = function(req, res) {
 
 exports.tologin = function(req, res) {
   res.render('./admin-login/admin-login', {
-    tip: '请输入账号和密码',
-    "pageNav": {
-      "prev": "上一页",
-      "next": "下一页",
-      "center": "博客归档"
-    }
+    tip: '请输入账号和密码'
   });
 }
 
@@ -313,22 +293,12 @@ exports.login = function(req, res) {
         console.log(err);
       }
       res.render('./list/list', {
-        articles: articles,
-        "pageNav": {
-          "prev": "上一页",
-          "next": "下一页",
-          "center": "博客归档"
-        }
+        articles: articles
       })
     })
   } else {
     res.render('./admin-login/admin-login', {
-      tip: '输入的密码有误',
-      "pageNav": {
-        "prev": "上一页",
-        "next": "下一页",
-        "center": "博客归档"
-      }
+      tip: '输入的密码有误'
     });
   }
 };
