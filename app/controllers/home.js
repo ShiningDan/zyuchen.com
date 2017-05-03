@@ -16,28 +16,19 @@ exports.home = function(req, res) {
       if (abstracts.length <= homepageCount) {
         pageNavPn.prev = "";
         pageNavPn.next = "";
-        res.render('./home/home', {
-          "abstracts": abstracts,
-          "pageNavPn": pageNavPn,
-          "pageNav": {
-            "prev": undefined,
-            "next": "下一页",
-            "center": "博客归档"
-          }
-        });
       } else {
         pageNavPn.prev = "";
         pageNavPn.next = "?gt=" + abstracts[homepageCount-1]._id;
-        res.render('./home/home', {
-          "abstracts": abstracts.slice(0, homepageCount),
-          "pageNavPn": pageNavPn,
-          "pageNav": {
-            "prev": undefined,
-            "next": "下一页",
-            "center": "博客归档"
-          }
-        });
       }
+      res.render('./home/home', {
+        "abstracts": abstracts.slice(0, homepageCount),
+        "pageNavPn": pageNavPn,
+        "pageNav": {
+          "prev": pageNavPn.prev === "" ? undefined : "上一页",
+          "next": pageNavPn.next === "" ? undefined : "下一页",
+          "center": "博客归档"
+        }
+      });
     });
   } else if (lt !== undefined) {
     Abstract.find({"_id": {"$lt": lt}}).sort({"_id": -1}).limit(homepageCount + 1)
@@ -109,18 +100,36 @@ exports.article = function(req, res) {
       console.log(err);
     }
     let pageNavPn = {
-      prev: undefined,
-      next: undefined,
+      prev: "",
+      next: "",
     };
-    res.render('./article/article', {
-      content: article.content,
-      sid: utility.md5(article.link),
-      "pageNavPn": pageNavPn,
-      "pageNav": {
-        "prev": "上一页",
-        "next": "下一页",
-        "center": "博客归档"
+    Article.find({"_id": {"$gt": article._id}}).limit(1)
+    .exec(function(err, articleNext) {
+      if (err) {
+        console.log(err);
       }
-    })
+      if (articleNext.length === 1) {
+        pageNavPn.next = articleNext[0].link;
+      }
+      Article.find({"_id": {"$lt": article._id}}).sort({"_id": -1}).limit(1)
+      .exec(function(err, articlePrev) {
+        if (err) {
+          console.log(err);
+        }
+        if (articlePrev.length === 1) {
+          pageNavPn.prev = articlePrev[0].link;
+        }
+        res.render('./article/article', {
+          content: article.content,
+          sid: utility.md5(article.link),
+          "pageNavPn": pageNavPn,
+          "pageNav": {
+            "prev": pageNavPn.prev === "" ? undefined : "上一页",
+            "next": pageNavPn.next === "" ? undefined : "下一页",
+            "center": "博客归档"
+          }
+        })
+      })
+    });
   })
 }
