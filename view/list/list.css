@@ -1,6 +1,7 @@
+button {color:#fff; background-color: #538ED5; border: 1px solid #538ED5; display: inline-block;padding: 6px 12px;font-size: 14px; cursor: pointer; border-radius: 6px;}
+button a {color: #fff;}
 table {border: 1px solid #ddd; width: 100%; max-width: 100%; margin-top: 20px; border-spacing: 0; border-collapse: collapse;}
 th, td { padding: 8px; line-height: 1.4; text-align: left; border: 1px solid #ddd; border-bottom-width: 2px;}
 th {vertical-align: bottom;}
 td {vertical-align: middle; max-width: 20%;}
 td a {color: #538ED5;}
-td button {color:#fff; background-color: #538ED5; border: 1px solid #538ED5; display: inline-block;padding: 6px 12px;font-size: 14px; cursor: pointer; border-radius: 6px;}

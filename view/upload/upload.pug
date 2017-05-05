@@ -12,9 +12,17 @@ block content
     .form-group
       label(for='categories')  文章标签 ：
       if article.categories
-        input(type="text", name="upload[categories]", id="categories" value=article.categories.join(" ") )
+        input(type="text", name="upload[categories]", id="categories")
       else
-        input(type="text", name="upload[categories]", id="categories" value=article.categories, required=true)     
+        input(type="text", name="upload[categories]", id="categories", required=true)     
+      each cat in categories
+        .checkbox
+          if article.categories
+            input(type="checkbox", name="upload[cbcategory]", value=cat.name, id=cat.name, checked=article.categories.indexOf(cat.name) !== -1) 
+            label(for=cat.name) #{cat.name}
+          else
+            input(type="checkbox", name="upload[cbcategory]", value=cat.name, id=cat.name) 
+            label(for=cat.name) #{cat.name}
     .form-group
       label(for='createAt')  创建时间 ：
       if (abstract.meta)

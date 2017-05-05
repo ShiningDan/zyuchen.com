@@ -6,10 +6,13 @@ let markdownToc = require('markdown-toc');
 let underScore = require('underscore');            // 查看 underscore 的使用方法
 
 exports.upload = function(req, res) {
-  res.render('./upload/upload', {
+  Category.find({}, function(err, categories) {
+    res.render('./upload/upload', {
     article: {},
-    abstract: {}
+    abstract: {},
+    categories: categories,
   });
+  })
 };
 
 exports.save = function(req, res) {
@@ -22,11 +25,20 @@ exports.save = function(req, res) {
         console.log(err);
       }
       uploadObj.categories = uploadObj.categories.split(' ').filter(function(obj) {
-          obj = obj.trim();
-          if (obj !== "") {
-            return obj;
-          }
+        obj = obj.trim();
+        if (obj !== "") {
+          return obj;
+        }
       });
+      let cateSet = new Set(uploadObj.categories);
+      if (typeof uploadObj.cbcategory === "string") {
+        cateSet.add(uploadObj.cbcategory);
+      } else if (typeof uploadObj.cbcategory === "object") {
+        uploadObj.cbcategory.forEach(function(element) {
+          cateSet.add(element)
+        });
+      }
+      uploadObj.categories = Array.from(cateSet);
       uploadObj.md = uploadObj.content;
       let markdowntocdiv = '<div id="toc"><header>文章目录</header>' + marked(markdownToc(uploadObj.content).content) + '</div>';
       uploadObj.content = markdowntocdiv + marked(uploadObj.content);
@@ -148,11 +160,21 @@ exports.save = function(req, res) {
   } else {
     // 如果 id 不存在，即该文章是一篇新文章
     uploadObj.categories = uploadObj.categories.split(' ').filter(function(obj) {
-        obj = obj.trim();
-        if (obj !== "") {
-          return obj;
-        }
+      obj = obj.trim();
+      if (obj !== "") {
+        return obj;
+      }
     });
+    let cateSet = new Set(uploadObj.categories);
+    if (typeof uploadObj.cbcategory === "string") {
+      cateSet.add(uploadObj.cbcategory);
+    } else if (typeof uploadObj.cbcategory === "object") {
+      uploadObj.cbcategory.forEach(function(element) {
+        cateSet.add(element)
+      });
+    }
+    uploadObj.categories = Array.from(cateSet);
+
 
     let createAt = new Date(uploadObj.createAt);
     let updateAt = new Date(uploadObj.updateAt);
@@ -267,10 +289,13 @@ exports.update = function(req, res) {
       if (err) {
         console.log(err);
       }
-      res.render('./upload/upload', {
-        article: article,
-        abstract: abstract
-      });
+      Category.find({}, function(err, categories) {
+        res.render('./upload/upload', {
+          article: article,
+          abstract: abstract,
+          categories: categories,
+        });
+      })
     })
   })
 };
