@@ -1,7 +1,7 @@
 let Abstract = require('../models/abstract');
 let Article = require('../models/article');
 let utility = require('utility');
-let homepageCount = 2;
+let homepageCount = 5;
 
 exports.home = function(req, res) {
   let lt = req.query.lt;
@@ -130,6 +130,47 @@ exports.article = function(req, res) {
           }
         })
       })
+    });
+  })
+}
+
+exports.archives = function(req, res) {
+  Abstract.find({}, function(err, abstracts) {
+    let articles = {};
+    abstracts.forEach(function(abstract) {
+      let date = abstract.meta.createAt;
+      let year = date.getFullYear();
+      let month = date.getUTCMonth() + 1;  // 0-11
+      let link = abstract.link;
+      let title = abstract.title;
+      if (articles[year]) {
+        let aYear = articles[year];  //aYear should be an array of months
+        if (aYear[month]) {
+          let aMonth = aYear[month];  //aMonth should be an array of article info
+          aMonth = aMonth.push({
+            title: title,
+            link: link,
+            date: date,
+          });
+        } else {
+          aYear[month] = [{
+            title: title,
+            link: link,
+            date: date,
+          }];
+        }
+      } else {
+        articles[year] = {};
+        articles[year][month] = [{
+          title: title,
+          link: link,
+          date: date,
+        }];
+      }
+    })
+    // console.log(articles);  // object keys are in order
+    res.render('./archives/archives', {
+      articles: articles,
     });
   })
 }

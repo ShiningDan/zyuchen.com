@@ -16,7 +16,7 @@ gulp.task('default', ['browser-sync'], function() {
 gulp.task('bs-delay', function() {
   setTimeout(function() {
     browserSync.reload({stream: false});
-  }, 1000);
+  }, 1500);
 })
 
 gulp.task('browser-sync', ['nodemon'], function() {
