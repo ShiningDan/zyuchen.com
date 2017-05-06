@@ -6,6 +6,7 @@ module.exports = function(app) {
 
   app.get('/', Home.home);
   app.get('/post/archives', Home.archives);
+  app.get('/post/series', Home.series);
   app.get('/post/:link', Home.article);
 
   // admin

@@ -5,10 +5,10 @@ block content
   #toc
     header 年份列表
     ul
-      li
-        a(href="#toc-2017") 2017 年
-      li
-        a(href="#toc-2016") 2016 年
+      - for (var i = articles.length - 1; i >=0 ; i--)
+        - for (var j in articles[i])
+          li
+            a(href="#toc-"+j) #{j} 年
   h1 归档
   p 
     | 本博客系统是自己搭建的博客系统，后台系统用的是 
@@ -22,14 +22,16 @@ block content
     | 归档部分按照时间顺序展示文章，文章质量良莠不齐，既有想与大家分享的个人心得，也有平时学习未整理好的总结笔记，如果大家想选择性阅读一些文章，可以点击链接来 
     a(href="/post/series") 专题
     |  查看。希望自己的在这个浮躁的时代坚持阅读与写作，也非常感谢大家的支持与反馈。
-  - for (var i in articles)
-    div(name="toc"+i)
-      - for (var j in articles[i])
-        h2 #{i} 年 #{j} 月
-        ul
-          - articles[i][j].forEach(function(article) {
-            li 
-              a(href=article.link) #{article.title}
-              .time (#{moment(article.date).format('MMM DD, YYYY')})
-          - })
+  - for (var i = articles.length - 1; i >=0 ; i--)
+    - for (var j in articles[i])
+      div(name="toc"+j)
+        - for (var k = articles[i][j].length - 1; k >= 0; k--)
+          - for (var l in articles[i][j][k])
+            h2 #{j} 年 #{l} 月
+            ul
+              - articles[i][j][k][l].forEach(function(article) {
+                li 
+                  a(href=article.link) #{article.title}
+                  .time (#{moment(article.date).format('MMM DD, YYYY')})
+              - })
     
