@@ -1,17 +1,21 @@
 let Article = require('../models/article');
 let Abstract = require('../models/abstract');
 let Category = require('../models/category');
+let Series = require('../models/series');
 let marked = require('marked');
 let markdownToc = require('markdown-toc');
 let underScore = require('underscore');            // 查看 underscore 的使用方法
 
 exports.upload = function(req, res) {
   Category.find({}, function(err, categories) {
-    res.render('./upload/upload', {
-    article: {},
-    abstract: {},
-    categories: categories,
-  });
+    Series.find({}, function(err, series) {
+      res.render('./upload/upload', {
+        article: {},
+        abstract: {},
+        categories: categories,
+        series: series,
+      });
+    })
   })
 };
 
@@ -24,6 +28,7 @@ exports.save = function(req, res) {
       if (err) {
         console.log(err);
       }
+      // 处理 upload.cartegories, 因为 categories 在 input 里面有，在 checkbox 里面也有
       uploadObj.categories = uploadObj.categories.split(' ').filter(function(obj) {
         obj = obj.trim();
         if (obj !== "") {
@@ -39,9 +44,45 @@ exports.save = function(req, res) {
         });
       }
       uploadObj.categories = Array.from(cateSet);
+
+      // 处理 upload.series, 因为 series 在 input 里面有，在 checkbox 里面也有
+      uploadObj.series = uploadObj.series.split(' ').filter(function(obj) {
+          obj = obj.trim();
+          if (obj !== "") {
+          return obj;
+        }
+      });
+      let seriesSet = new Set(uploadObj.series);
+      if (typeof uploadObj.cseries === "string") {
+        seriesSet.add(uploadObj.cseries);
+      } else if (typeof uploadObj.cseries === "object") {
+        uploadObj.cseries.forEach(function(element) {
+          seriesSet.add(element)
+        });
+      }
+      uploadObj.series = Array.from(seriesSet);
+
       uploadObj.md = uploadObj.content;
       let markdowntocdiv = '<div id="toc"><header>文章目录</header>' + marked(markdownToc(uploadObj.content).content) + '</div>';
       uploadObj.content = markdowntocdiv + marked(uploadObj.content);
+
+      // 判断此次更新中 series 是否从文章中删除，如果删除了，则将 series 中对应的文章删除
+      article.series.forEach(function(series){
+        if (!uploadObj.series.includes(series)) {
+          Series.findOne({name: series}, function(err, s) {
+            if (s.articles.length === 1) {
+              s.remove(function(err, series) {
+                console.log(err);
+              })
+            } else {
+              s.articles.splice(s.articles.indexOf(series), 1);
+              s.save(function(err, s) {
+                console.log(err);
+              })
+            }
+          })
+        }
+      })
 
       //更新 article 并且存入到数据库，替代原来的 article
       let _article = underScore.extend(article, uploadObj);
@@ -61,6 +102,37 @@ exports.save = function(req, res) {
         if (err) {
           console.log(err);
         }
+
+        // 如果有series，则更新 series
+        if (uploadObj.series.length !== 0) {
+          uploadObj.series.forEach(function(series) {
+            Series.findOne({name: series}, function(err, s) {
+              if (s) {
+                let sSet = new Set(s.articles);
+                sSet.add(article._id);
+                s.articles = Array.from(sSet);
+                s.save(function(err, s) {
+                  if (err) {
+                    console.log(err);
+                  }
+                })
+              } else {
+                let _series = new Series({
+                  name: series,
+                  articles: [article._id],
+                });
+                console.log(_series);   
+                _series.save(function(err, s) {
+                  if (err) {
+                    console.log(err);
+                  }
+                })             
+              }
+            })
+          })
+        }
+
+        // 更新 abstract 和 category
         Abstract.findOne({link: article.link}, function(err, abstract) {
           if (err) {
             console.log(err);
@@ -290,11 +362,14 @@ exports.update = function(req, res) {
         console.log(err);
       }
       Category.find({}, function(err, categories) {
-        res.render('./upload/upload', {
-          article: article,
-          abstract: abstract,
-          categories: categories,
-        });
+        Series.find({}, function(err, series) {
+          res.render('./upload/upload', {
+            article: article,
+            abstract: abstract,
+            categories: categories,
+            series: series,
+          });
+        })
       })
     })
   })

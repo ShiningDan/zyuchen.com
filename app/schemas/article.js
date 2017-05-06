@@ -12,7 +12,10 @@ let ArticleSchema = new Schema({
   }],                 // should be ref
   categories: [{
     type: String,
-  }],                
+  }], 
+  series: [{
+    type: String,
+  }],               
   meta: {
     createAt: {
       type: Date,

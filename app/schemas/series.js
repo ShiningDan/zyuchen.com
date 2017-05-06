@@ -2,7 +2,7 @@ let mongoose = require("mongoose");
 let Schema = mongoose.Schema;
 let ObjectId = Schema.Types.ObjectId;
 
-let CategorySchema = new Schema({
+let SeriesSchema = new Schema({
   name: String,
   articles: [{
     type: ObjectId,
@@ -20,7 +20,7 @@ let CategorySchema = new Schema({
   }
 });
 
-CategorySchema.pre('save', function(next) {
+SeriesSchema.pre('save', function(next) {
   if (this.isNew) {
     this.meta.createAt = this.meta.updateAt = Date.now();
   } else {
@@ -29,4 +29,4 @@ CategorySchema.pre('save', function(next) {
   next();
 });
 
-module.exports = CategorySchema;
+module.exports = SeriesSchema;

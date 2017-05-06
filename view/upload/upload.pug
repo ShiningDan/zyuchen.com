@@ -24,6 +24,17 @@ block content
             input(type="checkbox", name="upload[cbcategory]", value=cat.name, id=cat.name) 
             label(for=cat.name) #{cat.name}
     .form-group
+      label(for='series') 文章专题（可选）：
+      input(type='text', name='upload[series]', id='series')
+      each s in series
+        .checkbox
+          if article.series
+            input(type="checkbox", name="upload[cseries]", value=s.name, id=s.name, checked=article.series.indexOf(s.name) !== -1) 
+            label(for=s.name) #{s.name}
+          else
+            input(type="checkbox", name="upload[cseries]", value=s.name, id=s.name) 
+            label(for=s.name) #{s.name}
+    .form-group
       label(for='createAt')  创建时间 ：
       if (abstract.meta)
         input(type="date" name="upload[createAt]", id="createAt", value=moment(abstract.meta.createAt).format('YYYY-MM-DD'))
