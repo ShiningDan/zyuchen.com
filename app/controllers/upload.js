@@ -121,7 +121,7 @@ exports.save = function(req, res) {
                   name: series,
                   articles: [article._id],
                 });
-                console.log(_series);   
+                // console.log(_series);   
                 _series.save(function(err, s) {
                   if (err) {
                     console.log(err);
@@ -247,6 +247,22 @@ exports.save = function(req, res) {
     }
     uploadObj.categories = Array.from(cateSet);
 
+    // 处理 upload.series, 因为 series 在 input 里面有，在 checkbox 里面也有
+    uploadObj.series = uploadObj.series.split(' ').filter(function(obj) {
+        obj = obj.trim();
+        if (obj !== "") {
+        return obj;
+      }
+    });
+    let seriesSet = new Set(uploadObj.series);
+    if (typeof uploadObj.cseries === "string") {
+      seriesSet.add(uploadObj.cseries);
+    } else if (typeof uploadObj.cseries === "object") {
+      uploadObj.cseries.forEach(function(element) {
+        seriesSet.add(element)
+      });
+    }
+    uploadObj.series = Array.from(seriesSet);
 
     let createAt = new Date(uploadObj.createAt);
     let updateAt = new Date(uploadObj.updateAt);
@@ -257,6 +273,7 @@ exports.save = function(req, res) {
       link: '/post/' + uploadObj.link,
       comments: [],
       categories: uploadObj.categories,
+      series: uploadObj.series,
     }
 
     let markdowntocdiv = '<div id="toc"><header>文章目录</header>' + marked(markdownToc(uploadObj.content).content) + '</div>';
@@ -278,6 +295,37 @@ exports.save = function(req, res) {
         console.log(err);
       }
       console.log('article saved');
+
+      // 如果有series，则更新 series
+      if (uploadObj.series.length !== 0) {
+        uploadObj.series.forEach(function(series) {
+          Series.findOne({name: series}, function(err, s) {
+            if (s) {
+              let sSet = new Set(s.articles);
+              sSet.add(article._id);
+              s.articles = Array.from(sSet);
+              s.save(function(err, s) {
+                if (err) {
+                  console.log(err);
+                }
+                console.log('series:', s.name, 'updated');
+              })
+            } else {
+              let _series = new Series({
+                name: series,
+                articles: [article._id],
+              });
+              // console.log(_series);   
+              _series.save(function(err, s) {
+                if (err) {
+                  console.log(err);
+                }
+                console.log('series:', s.name, 'saved');                
+              })             
+            }
+          })
+        })
+      }
 
       let abstract = {
         title: uploadObj.title,
@@ -441,6 +489,18 @@ exports.delete = function(req, res) {
           if (!errflag) {
             res.json({success: 1});
           }
+        })
+        // 删除对应专题中文章的信息
+        article.series.forEach(function(s) {
+          Series.findOne({name: s}, function(err, series) {
+            //即使该文章是本专题的最后一篇文章，也不删除本专题
+            series.articles.splice(series.articles.indexOf(article._id), 1);
+            series.save(function(err, s) {
+              if (err) {
+                console.log(err);
+              }
+            })
+          })
         })
       })
     })

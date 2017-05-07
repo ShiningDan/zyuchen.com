@@ -24,7 +24,7 @@ block content
     |  查看。希望自己的在这个浮躁的时代坚持阅读与写作，也非常感谢大家的支持与反馈。
   - for (var i = articles.length - 1; i >=0 ; i--)
     - for (var j in articles[i])
-      div(name="toc"+j)
+      div(name="toc-"+j)
         - for (var k = articles[i][j].length - 1; k >= 0; k--)
           - for (var l in articles[i][j][k])
             h2 #{j} 年 #{l} 月

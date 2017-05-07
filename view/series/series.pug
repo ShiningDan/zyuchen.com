@@ -1,0 +1,22 @@
+extends ../layout/layout
+
+block content
+  link(href="/series/series.css", rel="stylesheet")
+  #toc
+    header 年份列表
+    ul
+      - for (var i in series)
+        li 
+          a(href='#toc-'+i) #{series[i].name}
+  h1 专题
+  p 
+    | 这里是博客的专题部分，将笔者平时的总结文章按照专题进行如下的区分。但是专题部分中收录的并不是所有的文章，如果想查看所有的文章，可以点击 
+    a(href='/post/archives') 归档
+    |  按照时间顺序浏览。
+  - for (var i in series)
+    div(name='toc-'+i) #{series[i].name}
+      ul
+        - for (var j = 0; j < series[i].articles.length; j++)
+          li 
+            a(href=series[i].articles[j].link) #{series[i].articles[j].title}
+            .time (#{moment(series[i].articles[j].meta.createAt).format('MMM DD, YYYY')})

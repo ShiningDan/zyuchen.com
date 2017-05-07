@@ -1,5 +1,6 @@
 let Abstract = require('../models/abstract');
 let Article = require('../models/article');
+let Series = require('../models/series');
 let utility = require('utility');
 let homepageCount = 5;
 
@@ -192,5 +193,15 @@ exports.archives = function(req, res) {
 }
 
 exports.series = function(req, res) {
+  Series.find({})
+  .populate('articles', ['title', 'link', 'meta.createAt'])
+  .exec(function(err, series) {
+    if (err) {
+        console.log(err);
+      }
 
+      res.render('./series/series', {
+        series: series,
+      });
+    });
 }
