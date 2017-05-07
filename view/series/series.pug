@@ -14,9 +14,9 @@ block content
     a(href='/post/archives') 归档
     |  按照时间顺序浏览。
   - for (var i in series)
-    div(name='toc-'+i) #{series[i].name}
-      ul
-        - for (var j = 0; j < series[i].articles.length; j++)
-          li 
-            a(href=series[i].articles[j].link) #{series[i].articles[j].title}
-            .time (#{moment(series[i].articles[j].meta.createAt).format('MMM DD, YYYY')})
+    h2(name='toc-'+i) #{series[i].name}
+    ul
+      - for (var j = 0; j < series[i].articles.length; j++)
+        li 
+          a(href=series[i].articles[j].link) #{series[i].articles[j].title}
+          .time (#{moment(series[i].articles[j].meta.createAt).format('MMM DD, YYYY')})

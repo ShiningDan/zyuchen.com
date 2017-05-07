@@ -171,21 +171,16 @@ exports.archives = function(req, res) {
     })
     // console.log(articles);  // object keys are in order
     let articleArray = [];
-    // console.log(articles);
     for (let i in articles) {
       let years = {};
       years[i] = [];
       articleArray.push(years);
       for (let j in articles[i]) {
-        // console.log(articles[i][j]);
         let months = {};
         months[j] = articles[i][j];
-        // console.log(months);
         articleArray[articleArray.length-1][i].push(months);
-        // console.log(articleArray[articleArray.length-1][i]);
       }
     }
-    // console.log(articleArray)
     res.render('./archives/archives', {
       articles: articleArray,
     });
@@ -199,7 +194,11 @@ exports.series = function(req, res) {
     if (err) {
         console.log(err);
       }
-
+      series.forEach(function(s) {
+        s.articles = s.articles.sort(function(a, b) {
+          return b.meta.createAt - a.meta.createAt;
+        });
+      })
       res.render('./series/series', {
         series: series,
       });
