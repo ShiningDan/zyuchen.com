@@ -14,6 +14,9 @@ exports.home = function(req, res) {
   if (lt === undefined && gt === undefined) {
     Abstract.find({}).limit(homepageCount + 1).
     exec(function(err, abstracts) {
+      // abstracts = abstracts.sort(function(a, b) {
+      //   return b.meta.createAt - a.meta.createAt;
+      // })
       if (abstracts.length <= homepageCount) {
         pageNavPn.prev = "";
         pageNavPn.next = "";
