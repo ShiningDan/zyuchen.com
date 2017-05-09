@@ -3,5 +3,24 @@ extends ../layout/layout
 block content
   link(href="/article/article.css", rel="stylesheet")
   | !{content}
+  .eof --EOF--
+  .post-info
+    | 发表于
+    span.time #{moment(article.meta.createAt).format('YYYY-MM-DD')}
+    | 并被添加「
+    span
+      each i in article.categories
+        span.tag 
+          a(href='') #{i}
+    |」标签，最后修改于
+    span.time #{moment(article.meta.updateAt).format('YYYY-MM-DD')}
+    | 。
+  h3.series-info 专题「#{article.series[0]}」相关的其他文章
+    a(href='') »
+  ul.series-ul
+    each i in series.articles
+      li 
+        a(href= i.link) #{i.title}
+        span.time (#{moment(i.meta.createAt).format('MMM DD, YYYY')})
   #SOHUCS(sid= sid)
   script(src="/js/comment.js")

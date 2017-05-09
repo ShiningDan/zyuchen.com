@@ -123,15 +123,21 @@ exports.article = function(req, res) {
         if (articlePrev.length === 1) {
           pageNavPn.prev = articlePrev[0].link;
         }
-        res.render('./article/article', {
-          content: article.content,
-          sid: utility.md5(article.link),
-          "pageNavPn": pageNavPn,
-          "pageNav": {
-            "prev": pageNavPn.prev === "" ? undefined : "上一页",
-            "next": pageNavPn.next === "" ? undefined : "下一页",
-            "center": "博客归档"
-          }
+        Series.findOne({name: article.series[0]}).limit(10)
+        .populate('articles', ['title', 'link', 'meta.createAt'])
+        .exec(function(err, series) {
+          res.render('./article/article', {
+            content: article.content,
+            sid: utility.md5(article.link),
+            article: article,
+            series: series,
+            "pageNavPn": pageNavPn,
+            "pageNav": {
+              "prev": pageNavPn.prev === "" ? undefined : "上一页",
+              "next": pageNavPn.next === "" ? undefined : "下一页",
+              "center": "博客归档"
+            }
+          })
         })
       })
     });
