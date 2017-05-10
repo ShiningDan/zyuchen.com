@@ -7,10 +7,9 @@ let session = require('express-session');
 let mongoStore = require('connect-mongo')(session);    
 
 let port = process.env.PORT || 8000;
-let dbUrl = 'mongodb://127.0.0.1:27017/blog';
+let dbUrl = 'mongodb://zyc:blog@127.0.0.1:27017/blog';
 mongoose.Promise = global.Promise;
 mongoose.connect(dbUrl);
-
 
 let app = express();
 

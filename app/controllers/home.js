@@ -8,8 +8,8 @@ exports.home = function(req, res) {
   let lt = req.query.lt;
   let gt = req.query.gt;
   let pageNavPn = {
-    prev: undefined,
-    next: undefined,
+    prev: "",
+    next: "",
   };
   if (lt === undefined && gt === undefined) {
     Abstract.find({}).limit(homepageCount + 1).
@@ -17,11 +17,7 @@ exports.home = function(req, res) {
       // abstracts = abstracts.sort(function(a, b) {
       //   return b.meta.createAt - a.meta.createAt;
       // })
-      if (abstracts.length <= homepageCount) {
-        pageNavPn.prev = "";
-        pageNavPn.next = "";
-      } else {
-        pageNavPn.prev = "";
+      if (abstracts.length > homepageCount){
         pageNavPn.next = "?gt=" + abstracts[homepageCount-1]._id;
       }
       res.render('./home/home', {
@@ -39,7 +35,6 @@ exports.home = function(req, res) {
     .exec(function(err, abstracts) {
       abstracts = abstracts.reverse();
       if (abstracts.length <= homepageCount) {
-        pageNavPn.prev = "";
         pageNavPn.next = "?gt=" + abstracts[abstracts.length-1]._id;
         res.render('./home/home', {
           "abstracts": abstracts,
@@ -69,7 +64,6 @@ exports.home = function(req, res) {
     .exec(function(err, abstracts) {
       if (abstracts.length <= homepageCount) {
         pageNavPn.prev = "?lt=" + abstracts[0]._id;
-        pageNavPn.next = "";
         res.render('./home/home', {
           "abstracts": abstracts,
           "pageNavPn": pageNavPn,

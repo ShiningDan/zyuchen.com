@@ -1,11 +1,11 @@
 #header {position: fixed; top: 0; bottom: 0; width: 270px;box-sizing: border-box;padding: 70px; background-image: url('/img/header-bg.jpg'); background-size: cover;}
 #avatar a {display: block;margin: -10px 0 0 -10px; height: 150px; width: 150px; border-radius: 50%; background: url('./avatar.jpg');background-size: 100% 100%;}
-#header h1 {font-size: 24px; margin: 20px auto 10px;}
+#header h1 {font-size: 28px; margin: 20px auto 10px;font-weight: 400;}
 #header a { color: #333;}
 #sup > p {margin: 6px auto;color: #666;}
 #main-nav {margin-top: 40px}
 #main-nav ul {list-style: none;}
-#main-nav ul li{font-size: 16px;margin-top: 10px;}
+#main-nav ul li{margin-top: 10px;}
 @media screen and (max-width: 1024px) {
     #header {width: 210px; padding: 70px 40px;}
 }

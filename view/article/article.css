@@ -1,4 +1,4 @@
-#content {color: #444; font-size: 16px; line-height: 1.6; word-wrap: break-word;}
+#content {color: #444; line-height: 1.6; word-wrap: break-word;}
 #content h1 {color: #333; font-size: 2rem; font-weight: 400; line-height: 35px;}
 #content h2 {font-size: 1.6rem;}
 #content h3 {font-size: 1.4rem;}
@@ -22,8 +22,8 @@
 #content .series-info a {text-decoration: none;font-size: 14px;margin-left: 4px;}
 #content .series-ul .time {font-size: 14px;margin-left: 10px;}
 #toc {float: right; border: 1px solid #ccc; padding: 10px; max-width: 260px; min-width: 120px; margin: 0 0 15px 20px;}
-#toc ul{margin-left: 14px; font-size: 16px;}
-#toc>header{text-align: center; font-size: 16px; border-bottom: 1px solid #ccc; margin: -6px 0 6px;}
+#toc ul{margin-left: 14px;}
+#toc>header{text-align: center; border-bottom: 1px solid #ccc; margin: -6px 0 6px;}
 @media screen and (max-width: 640px) {
     #toc {float: none; box-sizing: 100%; max-width: 100%; margin: 0 0 20px;}
 }

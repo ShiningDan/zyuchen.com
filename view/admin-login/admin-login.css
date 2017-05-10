@@ -6,8 +6,8 @@ body{height: 100%;}
 #login {width: 400px;background-color: #eee;position: absolute; top: 50%; left: 50%; margin: -150px 0 0 -200px;}
 #login .form-group {margin-top: 30px;overflow: hidden;}
 #login label {text-align: right; padding-top: 7px; width:20%; float: left;}
-#login input {width: 60%; height: 24px; padding: 6px 12px; line-height: 1.4; border: 1px solid #ccc; font-size: 16px;}
-#login button {margin: 0 auto 20px; padding: 6px 18px; display: block; background-color: #538ED5; border: 0px;border-radius: 5px; font-size: 16px; color: #fff; cursor: pointer; user-select: none;}
+#login input {width: 60%; height: 24px; padding: 6px 12px; line-height: 1.4; border: 1px solid #ccc;}
+#login button {margin: 0 auto 20px; padding: 6px 18px; display: block; background-color: #538ED5; border: 0px;border-radius: 5px; color: #fff; cursor: pointer; user-select: none;}
 #tip {text-align: center;padding-top: 20px;}
 @media screen and (max-width: 640px) {
   #login-wrap {height: 400px;}
