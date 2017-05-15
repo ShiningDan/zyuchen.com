@@ -17,4 +17,5 @@ module.exports = function(app) {
   app.get('/admin/login', Upload.tologin);
   app.post('/admin/upload/new', Admin.adminRequire, Upload.save);
   app.post('/admin/login', Admin.login);
+  app.get('/admin', Upload.tologin);
 } 
