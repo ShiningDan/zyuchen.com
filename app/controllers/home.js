@@ -127,9 +127,9 @@ exports.article = function(req, res) {
             series: series,
             "pageNavPn": pageNavPn,
             "pageNav": {
-              "prev": pageNavPn.prev === "" ? undefined : "上一页",
-              "next": pageNavPn.next === "" ? undefined : "下一页",
-              "center": "博客归档"
+              "prev": pageNavPn.prev === "" ? undefined : articlePrev[0].title,
+              "next": pageNavPn.next === "" ? undefined : articleNext[0].title,
+              "center": ""
             }
           })
         })

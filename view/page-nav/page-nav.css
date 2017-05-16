@@ -1,4 +1,4 @@
-#page-nav { margin-top: 20px; color: #538ED5; border-top: 1px solid #ccc; padding-top: 20px;}
+#page-nav { margin-top: 20px; color: #538ED5; border-top: 1px solid #ccc; padding-top: 20px;overflow: hidden;}
 .prev {float: left; text-decoration: none; color: #538ED5;}
 .next {float: right; text-decoration: none; color: #538ED5;}
 .center {margin: 0 auto; text-align: center;width: 80px;}

@@ -22,5 +22,11 @@ block content
       li 
         a(href= i.link) #{i.title}
         span.time (#{moment(i.meta.createAt).format('MMM DD, YYYY')})
-  #SOHUCS(sid= sid)
-  script(src="/js/comment.js")
+  
+block comment
+  section#comments
+    h1 Comments
+    #disqus_thread
+    script(src="/js/comment.js")
+    noscript Please enable JavaScript to view the 
+      a(href="https://disqus.com/?ref_noscript") comments powered by Disqus.
