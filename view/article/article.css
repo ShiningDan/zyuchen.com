@@ -21,6 +21,7 @@
 #content .tag:last-child:after {content: '';}
 #content .series-info a {text-decoration: none;font-size: 14px;margin-left: 4px;}
 #content .series-ul .time {font-size: 14px;margin-left: 10px;}
+#content #comments {margin-top: 20px; padding-top: 20px; border-top: 1px solid #ccc;}
 #toc {float: right; border: 1px solid #ccc; padding: 10px; max-width: 260px; min-width: 120px; margin: 0 0 15px 20px;}
 #toc ul{margin-left: 14px;}
 #toc>header{text-align: center; border-bottom: 1px solid #ccc; margin: -6px 0 6px;}
