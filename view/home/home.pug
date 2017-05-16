@@ -1,7 +1,10 @@
 extends ../layout/layout
 
+block style
+  style
+    include ../../www/static/css/home-combo.css
+
 block content
-  link(href="/home/home.css", rel="stylesheet")
   each abstract in abstracts
     article.post
       .meta

@@ -1,7 +1,10 @@
 extends ../layout/layout
 
+block style
+  style
+    include ../../www/static/css/list-combo.css
+
 block content
-  link(href="/list/list.css", rel="stylesheet")
   #mask
     #mask-content
       i.mask-tip 是否确认删掉文章？

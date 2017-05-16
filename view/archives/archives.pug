@@ -1,7 +1,10 @@
 extends ../layout/layout
 
+block style
+  style
+    include ../../www/static/css/archives-combo.css
+
 block content
-  link(href="/archives/archives.css", rel="stylesheet")
   #toc
     header 年份列表
     ul

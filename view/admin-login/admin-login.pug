@@ -1,7 +1,10 @@
 extends ../layout/layout
 
+block style
+  style
+    include ../../www/static/css/admin-login-combo.css
+
 block content
-  link(href="/admin-login/admin-login.css", rel="stylesheet")
   #login-wrap
     #login
       #tip= tip

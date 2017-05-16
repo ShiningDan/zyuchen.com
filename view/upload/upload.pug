@@ -1,7 +1,10 @@
 extends ../layout/layout
 
+block style
+  style
+    include ../../www/static/css/upload-combo.css
+
 block content
-  link(href="/upload/upload.css", rel="stylesheet")
   link(rel="stylesheet", href="/lib/simplemde/dist/simplemde.min.css")
   script(src="/lib/simplemde/dist/simplemde.min.js")
   form(method="POST", action="/admin/upload/new")

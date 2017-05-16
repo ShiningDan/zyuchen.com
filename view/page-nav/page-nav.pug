@@ -1,7 +1,6 @@
 nav#page-nav
   - if (pageNav)
-    link(href="/page-nav/page-nav.css", rel="stylesheet") 
     a.prev(href= pageNavPn.prev) #{pageNav.prev}
     a.next(href= pageNavPn.next) #{pageNav.next}
     .center
-      a(href='/post/archives') #{pageNav.center}
+      a(href='/archives') #{pageNav.center}

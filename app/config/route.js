@@ -5,8 +5,8 @@ let Admin = require('../controllers/admin');
 module.exports = function(app) {
 
   app.get('/', Home.home);
-  app.get('/post/archives', Home.archives);
-  app.get('/post/series', Home.series);
+  app.get('/archives', Home.archives);
+  app.get('/series', Home.series);
   app.get('/post/:link', Home.article);
 
   // admin

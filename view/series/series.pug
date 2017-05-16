@@ -1,7 +1,10 @@
 extends ../layout/layout
 
+block style
+  style
+    include ../../www/static/css/series-combo.css
+
 block content
-  link(href="/series/series.css", rel="stylesheet")
   #toc
     header 年份列表
     ul

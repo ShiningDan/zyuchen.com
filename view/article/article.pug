@@ -1,7 +1,10 @@
 extends ../layout/layout
 
+block style
+  style
+    include ../../www/static/css/article-combo.css
+
 block content
-  link(href="/article/article.css", rel="stylesheet")
   | !{content}
   .eof --EOF--
   .post-info

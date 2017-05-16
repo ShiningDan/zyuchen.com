@@ -1,11 +1,19 @@
 let gulp = require('gulp');
 let nodemon = require('gulp-nodemon');
 let browserSync  = require('browser-sync').create();
-// let connect = require('gulp-connect');
+let postcss = require('gulp-postcss');
+let autoprefixer = require('autoprefixer');
+let atImport = require('postcss-import');
+let mqpacker = require('css-mqpacker'); 
+let cssnano = require('cssnano');
 
-// gulp.task('templates', function() {
+gulp.task('css', function () { 
+  var processors = [autoprefixer, atImport, mqpacker, cssnano]; 
+  return gulp.src('./view/output/*-combo.css')
+    .pipe(postcss(processors))
+    .pipe(gulp.dest('./www/static/css')); 
+});
 
-// });
 
 gulp.task('default', ['browser-sync'], function() {
   gulp.watch('./view/**/*.*', browserSync.reload);
@@ -19,7 +27,7 @@ gulp.task('bs-delay', function() {
   }, 1500);
 })
 
-gulp.task('browser-sync', ['nodemon'], function() {
+gulp.task('browser-sync', ['css', 'nodemon'], function() {
     browserSync.init(null, {
 		  proxy: "http://localhost:8000",
       // files: ["./**/*.*"],
