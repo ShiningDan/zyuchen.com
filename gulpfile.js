@@ -1,11 +1,14 @@
-let gulp = require('gulp');
-let nodemon = require('gulp-nodemon');
-let browserSync  = require('browser-sync').create();
-let postcss = require('gulp-postcss');
-let autoprefixer = require('autoprefixer');
-let atImport = require('postcss-import');
-let mqpacker = require('css-mqpacker'); 
-let cssnano = require('cssnano');
+let gulp = require('gulp'),
+  nodemon = require('gulp-nodemon'),
+  browserSync  = require('browser-sync').create(),
+  postcss = require('gulp-postcss'),
+  autoprefixer = require('autoprefixer'),
+  atImport = require('postcss-import'),
+  mqpacker = require('css-mqpacker'),
+  cssnano = require('cssnano'),
+  imagemin = require('gulp-imagemin'),
+  pngquant = require('imagemin-pngquant'),
+  webp = require('gulp-webp');
 
 gulp.task('css', function () { 
   var processors = [autoprefixer, atImport, mqpacker, cssnano]; 
@@ -14,10 +17,27 @@ gulp.task('css', function () {
     .pipe(gulp.dest('./www/static/css')); 
 });
 
+gulp.task('webp', function () {
+    return gulp.src('./view/output/img/**/**/*.{png,jpg}')
+        .pipe(webp())
+        .pipe(gulp.dest('./www/static/img'));
+});
 
-gulp.task('default', ['browser-sync'], function() {
+gulp.task('imagemin', function () {
+    gulp.src('./view/output/img/**/**/*.{png,jpg,gif,ico}')
+        .pipe(imagemin({
+            // optimizationLevel: 5, //类型：Number  默认：3  取值范围：0-7（优化等级）
+            // progressive: true, //类型：Boolean 默认：false 无损压缩jpg图片
+            // interlaced: true, //类型：Boolean 默认：false 隔行扫描gif进行渲染
+            multipass: true, //类型：Boolean 默认：false 多次优化svg直到完全优化
+            use: [pngquant()] //使用pngquant深度压缩png图片的imagemin插件
+        }))
+        .pipe(gulp.dest('./www/static/img'));
+});
+
+gulp.task('default', ['imagemin', 'webp', 'css', 'browser-sync'], function() {
   gulp.watch('./view/**/*.*', browserSync.reload);
-  gulp.watch('./www/**/*.*', browserSync.reload);
+  gulp.watch('./www/*/*.*', browserSync.reload);
   gulp.watch(['./app/**/*.js', './www/static/js/*.js', './app.js'], ['bs-delay'])
 });
 
@@ -27,7 +47,7 @@ gulp.task('bs-delay', function() {
   }, 1500);
 })
 
-gulp.task('browser-sync', ['css', 'nodemon'], function() {
+gulp.task('browser-sync', ['nodemon'], function() {
     browserSync.init(null, {
 		  proxy: "http://localhost:8000",
       // files: ["./**/*.*"],
