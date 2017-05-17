@@ -9,7 +9,7 @@ let cssnano = require('cssnano');
 
 gulp.task('css', function () { 
   var processors = [autoprefixer, atImport, mqpacker, cssnano]; 
-  return gulp.src('./view/output/*-combo.css')
+  return gulp.src('./view/output/css/*-combo.css')
     .pipe(postcss(processors))
     .pipe(gulp.dest('./www/static/css')); 
 });
