@@ -5,6 +5,7 @@ let ObjectId = Schema.Types.ObjectId;
 let ArticleSchema = new Schema({
   title: String,
   content: String,
+  contentWebp: String,
   md: String,
   link: String,
   comments: [{

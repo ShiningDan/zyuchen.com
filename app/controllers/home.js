@@ -92,6 +92,8 @@ exports.home = function(req, res) {
 
 
 exports.article = function(req, res) {
+  // 判断客户端是否支持 webp 来决定是否提供 WebP 图像。
+  let acceptWebp = req.get('Accept').indexOf('image/webp') === -1 ? false : true;
   let link = '/post/' + req.params.link;
   Article.findOne({'link': link}, function(err, article) {
     if (err) {
@@ -121,7 +123,7 @@ exports.article = function(req, res) {
         .populate('articles', ['title', 'link', 'meta.createAt'])
         .exec(function(err, series) {
           res.render('./article/article', {
-            content: article.content,
+            content: acceptWebp === true ? article.contentWebp : article.content,
             sid: utility.md5(article.link),
             article: article,
             series: series,

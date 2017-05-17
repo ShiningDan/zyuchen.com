@@ -65,6 +65,9 @@ exports.save = function(req, res) {
       uploadObj.md = uploadObj.content;
       let markdowntocdiv = '<div id="toc"><header>文章目录</header>' + marked(markdownToc(uploadObj.content).content) + '</div>';
       uploadObj.content = markdowntocdiv + marked(uploadObj.content);
+      // 创建支持 WebP 的 Content 和 非 WebP 的 Content
+      let reg = /<img([\s\S]+?)src\s*="([\s\S]+?).(png)"/g;
+      uploadObj.contentWebp = uploadObj.content.replace(reg, '<img$1src="$2.webp"');
 
       // 判断此次更新中 series 是否从文章中删除，如果删除了，则将 series 中对应的文章删除
       article.series.forEach(function(series){
@@ -278,6 +281,9 @@ exports.save = function(req, res) {
 
     let markdowntocdiv = '<div id="toc"><header>文章目录</header>' + marked(markdownToc(uploadObj.content).content) + '</div>';
     article.content = markdowntocdiv + marked(uploadObj.content);
+    // 创建支持 WebP 的 Content 和 非 WebP 的 Content
+    let reg = /<img([\s\S]+?)src\s*="([\s\S]+?).(png)"/g;
+    article.contentWebp = article.content.replace(reg, '<img$1src="$2.webp"');
 
     // 首先创建 article，并且保存
     let _article = Article(article);
