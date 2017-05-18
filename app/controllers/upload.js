@@ -5,6 +5,9 @@ let Series = require('../models/series');
 let marked = require('marked');
 let markdownToc = require('markdown-toc');
 let underScore = require('underscore');            // 查看 underscore 的使用方法
+let path = require('path');
+let fs = require('fs');
+var sizeOf = require('image-size');
 
 exports.upload = function(req, res) {
   Category.find({}, function(err, categories) {
@@ -64,9 +67,13 @@ exports.save = function(req, res) {
 
       uploadObj.md = uploadObj.content;
       let markdowntocdiv = '<div id="toc"><header>文章目录</header>' + marked(markdownToc(uploadObj.content).content) + '</div>';
-      uploadObj.content = markdowntocdiv + marked(uploadObj.content);
+      let content = markdowntocdiv + marked(uploadObj.content);
       // 创建支持 WebP 的 Content 和 非 WebP 的 Content
       let reg = /<img([\s\S]+?)src\s*="([\s\S]+?).(png)"/g;
+      uploadObj.content = content.replace(reg, function(value, p1, p2) {
+        let imageSize = sizeOf(path.join(__dirname, '../../www/static', p2+'.png'));
+        return '<img' + p1 + 'data-src="' + p2 +'.png" width=' + imageSize.width + ' height='+imageSize.height;
+      })
       uploadObj.contentWebp = uploadObj.content.replace(reg, '<img$1src="$2.webp"');
 
       // 判断此次更新中 series 是否从文章中删除，如果删除了，则将 series 中对应的文章删除
@@ -106,13 +113,15 @@ exports.save = function(req, res) {
           console.log(err);
         }
 
-        // 如果有series，则更新 series
+        // 如果有series，则更新 series，如果原文章不在 serries 中，则新增该文章链接
         if (uploadObj.series.length !== 0) {
           uploadObj.series.forEach(function(series) {
             Series.findOne({name: series}, function(err, s) {
               if (s) {
-                let sSet = new Set(s.articles);
-                sSet.add(article._id);
+                let sSet = new Set(s.articles.map(function(article) {
+                  return article.toString();
+                }));
+                sSet.add(article._id.toString());            
                 s.articles = Array.from(sSet);
                 s.save(function(err, s) {
                   if (err) {
@@ -280,10 +289,14 @@ exports.save = function(req, res) {
     }
 
     let markdowntocdiv = '<div id="toc"><header>文章目录</header>' + marked(markdownToc(uploadObj.content).content) + '</div>';
-    article.content = markdowntocdiv + marked(uploadObj.content);
+    let content = markdowntocdiv + marked(uploadObj.content);
     // 创建支持 WebP 的 Content 和 非 WebP 的 Content
     let reg = /<img([\s\S]+?)src\s*="([\s\S]+?).(png)"/g;
-    article.contentWebp = article.content.replace(reg, '<img$1src="$2.webp"');
+    uploadObj.content = content.replace(reg, function(value, p1, p2) {
+      let imageSize = sizeOf(path.join(__dirname, '../../www/static', p2+'.png'));
+      return '<img' + p1 + 'data-src="' + p2 +'.png" width=' + imageSize.width + ' height='+imageSize.height;
+    })
+    uploadObj.contentWebp = uploadObj.content.replace(reg, '<img$1src="$2.webp"');
 
     // 首先创建 article，并且保存
     let _article = Article(article);

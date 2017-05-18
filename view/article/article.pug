@@ -1,5 +1,9 @@
 extends ../layout/layout
 
+block lazyload
+  script(defer)
+    include ../../www/static/js/lazyload.js
+
 block style
   style
     include ../../www/static/css/article-combo.css
@@ -27,9 +31,9 @@ block content
         span.time (#{moment(i.meta.createAt).format('MMM DD, YYYY')})
   
 block comment
-  section#comments
-    h1 Comments
-    #disqus_thread
-    script(src="/js/comment.js")
-    noscript Please enable JavaScript to view the 
-      a(href="https://disqus.com/?ref_noscript") comments powered by Disqus.
+  //- section#comments
+  //-   h1 Comments
+  //-   #disqus_thread
+  //-   script(src="/js/comment.js")
+  //-   noscript Please enable JavaScript to view the 
+  //-     a(href="https://disqus.com/?ref_noscript") comments powered by Disqus.
