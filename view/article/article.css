@@ -1,4 +1,5 @@
 #content {color: #444; line-height: 1.6; word-wrap: break-word;}
+#content .load{height: auto!important;}
 #content h1 {color: #333; font-size: 2rem; font-weight: 400; line-height: 35px;}
 #content h2 {font-size: 1.6rem;}
 #content h3 {font-size: 1.4rem;}

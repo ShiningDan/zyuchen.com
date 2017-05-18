@@ -12,6 +12,14 @@ window.addEventListener("DOMContentLoaded", function(event) {
       if (dom.offsetTop < scrollBottomHeight + 300) {
         let src = dom.getAttribute('data-src');
         dom.setAttribute('src', src);
+        let className = dom.getAttribute('class');
+        if (className) {
+          className += ' load';
+        }
+        else {
+          className = 'load';
+        }
+        dom.setAttribute('class', className);
         lazyloadDOM.splice(i, 1);
         i = 0;
         if (lazyloadDOM.length === 0) {
