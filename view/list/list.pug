@@ -1,5 +1,8 @@
 extends ../layout/layout
 
+block adminjs
+  script(src="/js/admin.js" defer)
+
 block style
   style
     include ../../www/static/css/list-combo.css
@@ -35,4 +38,3 @@ block content
             td: a(target='_blank', href='/admin/update/'+article._id) 修改
             td
               button.del(data-id= article._id) 删除
-  script(src="/js/admin.js")

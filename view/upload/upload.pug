@@ -1,5 +1,8 @@
 extends ../layout/layout
 
+block adminjs
+  script(src='/js/upload.js' defer)
+
 block style
   style
     include ../../www/static/css/upload-combo.css
@@ -62,4 +65,3 @@ block content
       //- textarea(name="article", id="article")
     .form-group
       button(type='submit')  录入
-  script(src='/js/upload.js')

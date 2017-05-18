@@ -8,7 +8,9 @@ let gulp = require('gulp'),
   cssnano = require('cssnano'),
   imagemin = require('gulp-imagemin'),
   pngquant = require('imagemin-pngquant'),
-  webp = require('gulp-webp');
+  webp = require('gulp-webp'),
+  uglify = require('gulp-uglify'),
+  babel = require('gulp-babel');
 
 gulp.task('css', function () { 
   var processors = [autoprefixer, atImport, mqpacker, cssnano]; 
@@ -35,11 +37,20 @@ gulp.task('imagemin', function () {
         .pipe(gulp.dest('./www/static/img'));
 });
 
-gulp.task('default', ['imagemin', 'webp', 'css', 'browser-sync'], function() {
+gulp.task('default', ['imagemin', 'webp', 'css', 'script', 'browser-sync'], function() {
   gulp.watch('./view/**/*.*', browserSync.reload);
   gulp.watch('./www/*/*.*', browserSync.reload);
-  gulp.watch(['./app/**/*.js', './www/static/js/*.js', './app.js'], ['bs-delay'])
+  gulp.watch(['./app/**/*.js', './view/output/js/*.js', './app.js'], ['bs-delay'])
 });
+
+gulp.task('script', function() {
+  return gulp.src('./view/output/js/*.js')
+    .pipe(babel({
+            presets: ['es2015']
+        }))
+    .pipe(uglify())
+    .pipe(gulp.dest('./www/static/js'));
+})
 
 gulp.task('bs-delay', function() {
   setTimeout(function() {
