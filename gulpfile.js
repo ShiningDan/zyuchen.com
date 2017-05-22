@@ -10,10 +10,11 @@ let gulp = require('gulp'),
   pngquant = require('imagemin-pngquant'),
   webp = require('gulp-webp'),
   uglify = require('gulp-uglify'),
-  babel = require('gulp-babel');
+  babel = require('gulp-babel'),
+  base64 = require('postcss-base64');
 
 gulp.task('css', function () { 
-  var processors = [autoprefixer, atImport, mqpacker, cssnano]; 
+  var processors = [autoprefixer, atImport, mqpacker, base64({extensions: ['.jpg']}), cssnano]; 
   return gulp.src('./view/output/css/*-combo.css')
     .pipe(postcss(processors))
     .pipe(gulp.dest('./www/static/css')); 
