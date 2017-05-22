@@ -7,6 +7,7 @@ let homepageCount = 5;
 exports.home = function(req, res) {
   let lt = req.query.lt;
   let gt = req.query.gt;
+  let visited = req.visited;
   let pageNavPn = {
     prev: "",
     next: "",
@@ -21,6 +22,7 @@ exports.home = function(req, res) {
         pageNavPn.next = "?gt=" + abstracts[homepageCount-1]._id;
       }
       res.render('./home/home', {
+        "visited": visited,
         "abstracts": abstracts.slice(0, homepageCount),
         "pageNavPn": pageNavPn,
         "pageNav": {
@@ -37,6 +39,7 @@ exports.home = function(req, res) {
       if (abstracts.length <= homepageCount) {
         pageNavPn.next = "?gt=" + abstracts[abstracts.length-1]._id;
         res.render('./home/home', {
+          "visited": visited,
           "abstracts": abstracts,
           "pageNavPn": pageNavPn,
           "pageNav": {
@@ -49,6 +52,7 @@ exports.home = function(req, res) {
         pageNavPn.prev = "?lt=" + abstracts[1]._id;
         pageNavPn.next = "?gt=" + abstracts[homepageCount]._id;
         res.render('./home/home', {
+          "visited": visited,
           "abstracts": abstracts.slice(1, homepageCount+1),          
           "pageNavPn": pageNavPn,
           "pageNav": {
@@ -65,6 +69,7 @@ exports.home = function(req, res) {
       if (abstracts.length <= homepageCount) {
         pageNavPn.prev = "?lt=" + abstracts[0]._id;
         res.render('./home/home', {
+          "visited": visited,
           "abstracts": abstracts,
           "pageNavPn": pageNavPn,
           "pageNav": {
@@ -77,6 +82,7 @@ exports.home = function(req, res) {
         pageNavPn.prev = "?lt=" + abstracts[0]._id;
         pageNavPn.next = "?gt=" + abstracts[homepageCount-1]._id;
         res.render('./home/home', {
+          "visited": visited,
           "abstracts": abstracts.slice(0, homepageCount),          
           "pageNavPn": pageNavPn,
           "pageNav": {
@@ -93,6 +99,7 @@ exports.home = function(req, res) {
 
 exports.article = function(req, res) {
   // 判断客户端是否支持 webp 来决定是否提供 WebP 图像。
+  let visited = req.visited;
   let acceptWebp = req.get('Accept').indexOf('image/webp') === -1 ? false : true;
   let link = '/post/' + req.params.link;
   Article.findOne({'link': link}, function(err, article) {
@@ -123,6 +130,7 @@ exports.article = function(req, res) {
         .populate('articles', ['title', 'link', 'meta.createAt'])
         .exec(function(err, series) {
           res.render('./article/article', {
+            "visited": visited,
             content: acceptWebp === true ? article.contentWebp : article.content,
             sid: utility.md5(article.link),
             article: article,
@@ -141,6 +149,7 @@ exports.article = function(req, res) {
 }
 
 exports.archives = function(req, res) {
+  let visited = req.visited;
   Abstract.find({}, function(err, abstracts) {
     let articles = {};
     abstracts.forEach(function(abstract) {
@@ -187,12 +196,14 @@ exports.archives = function(req, res) {
       }
     }
     res.render('./archives/archives', {
+      "visited": visited,
       articles: articleArray,
     });
   })
 }
 
 exports.series = function(req, res) {
+  let visited = req.visited;
   Series.find({})
   .populate('articles', ['title', 'link', 'meta.createAt'])
   .exec(function(err, series) {
@@ -205,6 +216,7 @@ exports.series = function(req, res) {
         });
       })
       res.render('./series/series', {
+        "visited": visited,
         series: series,
       });
     });

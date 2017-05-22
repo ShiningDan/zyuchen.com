@@ -39,9 +39,7 @@ gulp.task('imagemin', function () {
 });
 
 gulp.task('default', ['imagemin', 'webp', 'css', 'script', 'browser-sync'], function() {
-  gulp.watch('./view/**/*.*', browserSync.reload);
-  gulp.watch('./www/*/*.*', browserSync.reload);
-  gulp.watch(['./app/**/*.js', './view/output/js/*.js', './app.js'], ['bs-delay'])
+  gulp.watch(['./view/**/*.*', './www/*/*.*', './app/**/*.js', './view/output/js/*.js', './app.js'], ['css', 'script', 'bs-delay'])
 });
 
 gulp.task('script', function() {

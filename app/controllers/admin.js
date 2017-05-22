@@ -2,6 +2,7 @@ let Article = require('../models/article');
 let User = require('../models/user');
 
 exports.login = function(req, res) {
+  let visited = req.visited;
   let login = req.body.login;
   let name = login.name;
   let pass = login.pass;
@@ -17,16 +18,19 @@ exports.login = function(req, res) {
             console.log(err);
           }
           res.render('./list/list', {
+            "visited": visited,
             articles: articles
           })
         })
       } else {
         res.render('./admin-login/admin-login', {
+          "visited": visited,
           tip: '输入的账号或密码有误'
         });
       }
     } else {
       res.render('./admin-login/admin-login', {
+        "visited": visited,
         tip: '没有此用户'
       });
     }

@@ -1,0 +1,1 @@
+"use strict";function ls(e){var n=document.getElementById(e);if(!n)throw new Error("ls save fn not find "+e);window.localStorage.setItem(e,n.innerHTML)}function ll(e,n){var t=window.localStorage.getItem(e);if(!t)throw new Error("ls load fn not find "+e);var o=n?"script":"style",r=document.createElement(o);r.innerHTML=t,document.head.appendChild(r)}

@@ -1,8 +1,16 @@
 extends ../layout/layout
 
-block style
+block uniqueStyle
   style
     include ../../www/static/css/series-combo.css
+
+block commonStyle
+  - if (!visited)
+    style#common_css
+    include ../../www/static/css/common-combo.css
+    script ls('common_css', 0);
+  - else
+    script ll('common_css', 0);
 
 block content
   #toc

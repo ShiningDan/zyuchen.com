@@ -10,9 +10,11 @@ let fs = require('fs');
 var sizeOf = require('image-size');
 
 exports.upload = function(req, res) {
+  let visited = req.visited;
   Category.find({}, function(err, categories) {
     Series.find({}, function(err, series) {
       res.render('./upload/upload', {
+        "visited": visited,
         article: {},
         abstract: {},
         categories: categories,
@@ -23,6 +25,7 @@ exports.upload = function(req, res) {
 };
 
 exports.save = function(req, res) {
+  let visited = req.visited;
   let uploadObj = req.body.upload;
   let id = uploadObj._id;
   if(id) {
@@ -408,17 +411,20 @@ exports.save = function(req, res) {
 };
 
 exports.list = function(req, res) {
+  let visited = req.visited;
   Article.find({}, function(err, articles) {
     if (err) {
       console.log(err);
     }
     res.render('./list/list', {
+      "visited": visited,
       articles: articles
     })
   })
 };
 
 exports.update = function(req, res) {
+  let visited = req.visited;
   let _id = req.params.id;
   let article = Article.findById(_id, function(err, article) {
     if (err) {
@@ -431,6 +437,7 @@ exports.update = function(req, res) {
       Category.find({}, function(err, categories) {
         Series.find({}, function(err, series) {
           res.render('./upload/upload', {
+            "visited": visited,
             article: article,
             abstract: abstract,
             categories: categories,
@@ -443,13 +450,16 @@ exports.update = function(req, res) {
 };
 
 exports.tologin = function(req, res) {
+  let visited = req.visited;
   res.render('./admin-login/admin-login', {
+    "visited": visited,
     tip: '请输入账号和密码'
   });
 }
 
 
 exports.login = function(req, res) {
+  let visited = req.visited;
   let login = req.body.login;
   let name = login.name;
   let pass = login.pass;
@@ -460,11 +470,13 @@ exports.login = function(req, res) {
         console.log(err);
       }
       res.render('./list/list', {
+        "visited": visited,
         articles: articles
       })
     })
   } else {
     res.render('./admin-login/admin-login', {
+      "visited": visited,
       tip: '输入的密码有误'
     });
   }
