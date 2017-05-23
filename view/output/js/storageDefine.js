@@ -9,8 +9,10 @@ function ls(name) {
 function ll(name, tag) {
   let storage = window.localStorage.getItem(name);
   if (!storage) {
-    throw new Error('ls load fn not find ' + name);
     // 如果 cookie 中存在，但是在 localstorage 中找不到需要如何处理？先删除 cookie，然后刷新页面。
+    document.cookie = 'v=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    window.location.reload();
+    throw new Error('ls load fn not find ' + name);
   } else {
     let type = tag ? 'script' : 'style';  // 设置 0 来添加 style，设置 1 来添加 script
     let elem = document.createElement(type);
