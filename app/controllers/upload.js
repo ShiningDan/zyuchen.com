@@ -301,6 +301,9 @@ exports.save = function(req, res) {
     })
     uploadObj.contentWebp = uploadObj.content.replace(reg, '<img$1src="$2.webp"');
 
+    article.content = uploadObj.content;
+    article.contentWebp = uploadObj.contentWebp;
+
     // 首先创建 article，并且保存
     let _article = Article(article);
 
