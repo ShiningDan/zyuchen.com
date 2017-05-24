@@ -22,7 +22,8 @@ exports.home = function(req, res) {
         pageNavPn.next = "?gt=" + abstracts[homepageCount-1]._id;
       }
       res.render('./home/home', {
-        "visited": visited,
+        visited: visited,
+        tag: req.tag,
         "abstracts": abstracts.slice(0, homepageCount),
         "pageNavPn": pageNavPn,
         "pageNav": {
@@ -39,7 +40,8 @@ exports.home = function(req, res) {
       if (abstracts.length <= homepageCount) {
         pageNavPn.next = "?gt=" + abstracts[abstracts.length-1]._id;
         res.render('./home/home', {
-          "visited": visited,
+          visited: visited,
+          tag: req.tag,
           "abstracts": abstracts,
           "pageNavPn": pageNavPn,
           "pageNav": {
@@ -52,7 +54,8 @@ exports.home = function(req, res) {
         pageNavPn.prev = "?lt=" + abstracts[1]._id;
         pageNavPn.next = "?gt=" + abstracts[homepageCount]._id;
         res.render('./home/home', {
-          "visited": visited,
+          visited: visited,
+          tag: req.tag,
           "abstracts": abstracts.slice(1, homepageCount+1),          
           "pageNavPn": pageNavPn,
           "pageNav": {
@@ -69,7 +72,8 @@ exports.home = function(req, res) {
       if (abstracts.length <= homepageCount) {
         pageNavPn.prev = "?lt=" + abstracts[0]._id;
         res.render('./home/home', {
-          "visited": visited,
+          visited: visited,
+          tag: req.tag,
           "abstracts": abstracts,
           "pageNavPn": pageNavPn,
           "pageNav": {
@@ -82,7 +86,8 @@ exports.home = function(req, res) {
         pageNavPn.prev = "?lt=" + abstracts[0]._id;
         pageNavPn.next = "?gt=" + abstracts[homepageCount-1]._id;
         res.render('./home/home', {
-          "visited": visited,
+          visited: visited,
+          tag: req.tag,
           "abstracts": abstracts.slice(0, homepageCount),          
           "pageNavPn": pageNavPn,
           "pageNav": {
@@ -130,7 +135,8 @@ exports.article = function(req, res) {
         .populate('articles', ['title', 'link', 'meta.createAt'])
         .exec(function(err, series) {
           res.render('./article/article', {
-            "visited": visited,
+            visited: visited,
+            tag: req.tag,
             content: acceptWebp === true ? article.contentWebp : article.content,
             sid: utility.md5(article.link),
             article: article,
@@ -196,7 +202,8 @@ exports.archives = function(req, res) {
       }
     }
     res.render('./archives/archives', {
-      "visited": visited,
+      visited: visited,
+      tag: req.tag,
       articles: articleArray,
     });
   })
@@ -216,7 +223,8 @@ exports.series = function(req, res) {
         });
       })
       res.render('./series/series', {
-        "visited": visited,
+        visited: visited,
+        tag: req.tag,
         series: series,
       });
     });

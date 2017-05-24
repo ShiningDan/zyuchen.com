@@ -8,9 +8,9 @@ block commonStyle
   - if (!visited)
     style#common_css
       include ../../www/static/css/common-combo.css
-    script ls('common_css', 0);
+    script ls('common_css', '#{tag}');
   - else
-    script ll('common_css', 0);
+    script ll('common_css', false);
 
 block uniqueStyle
   style#article-style

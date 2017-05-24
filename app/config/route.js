@@ -6,8 +6,8 @@ let Cookie = require('../controllers/cookie');
 module.exports = function(app) {
 
   app.get('/', Cookie.checkll, Home.home);
-  app.get('/archives', Cookie.checkll, Home.archives);
-  app.get('/series', Cookie.checkll, Home.series);
+  app.get('/archives/', Cookie.checkll, Home.archives);
+  app.get('/series/', Cookie.checkll, Home.series);
   app.get('/post/:link', Cookie.checkll, Home.article);
 
   // admin

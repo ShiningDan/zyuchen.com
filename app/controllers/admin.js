@@ -18,19 +18,22 @@ exports.login = function(req, res) {
             console.log(err);
           }
           res.render('./list/list', {
-            "visited": visited,
+            visited: visited,
+            tag: req.tag,
             articles: articles
           })
         })
       } else {
         res.render('./admin-login/admin-login', {
-          "visited": visited,
+          visited: visited,
+          tag: req.tag,
           tip: '输入的账号或密码有误'
         });
       }
     } else {
       res.render('./admin-login/admin-login', {
-        "visited": visited,
+        visited: visited,
+        tag: req.tag,
         tip: '没有此用户'
       });
     }
