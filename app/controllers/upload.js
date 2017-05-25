@@ -9,20 +9,22 @@ let path = require('path');
 let fs = require('fs');
 var sizeOf = require('image-size');
 
-exports.upload = function(req, res) {
-  let visited = req.visited;
-  Category.find({}, function(err, categories) {
-    Series.find({}, function(err, series) {
-      res.render('./upload/upload', {
-        "visited": visited,
-        article: {},
-        abstract: {},
-        categories: categories,
-        series: series,
-      });
-    })
-  })
-};
+exports.upload = async function(req, res) {
+  try {
+    let categories = Category.find({});
+    let series = Series.find({});
+    [categories, series] = await Promise.all([categories, series]);
+    res.render('./upload/upload', {
+      visited: req.visited,
+      article: {},
+      abstract: {},
+      categories: categories,
+      series: series,
+    });
+  } catch(e) {
+    // add error process
+  }
+}
 
 exports.save = function(req, res) {
   let visited = req.visited;
@@ -413,130 +415,133 @@ exports.save = function(req, res) {
   }
 };
 
-exports.list = function(req, res) {
-  let visited = req.visited;
-  Article.find({}, function(err, articles) {
-    if (err) {
-      console.log(err);
-    }
+exports.list = async function(req, res) {
+  try {
+    let articles = await Article.find({});
     res.render('./list/list', {
-      "visited": visited,
+      visited: req.visited,
       articles: articles
     })
-  })
-};
+  } catch(e) {
+    // add error process
+  }
+}
 
-exports.update = function(req, res) {
-  let visited = req.visited;
+exports.update = async function(req, res) {
   let _id = req.params.id;
-  let article = Article.findById(_id, function(err, article) {
-    if (err) {
-      console.log(err);
-    }
-    Abstract.findOne({link: article.link}, function(err, abstract) {
-      if (err) {
-        console.log(err);
-      }
-      Category.find({}, function(err, categories) {
-        Series.find({}, function(err, series) {
-          res.render('./upload/upload', {
-            "visited": visited,
-            article: article,
-            abstract: abstract,
-            categories: categories,
-            series: series,
-          });
-        })
-      })
-    })
-  })
-};
+  let article = await Article.findById(_id);
+  let abstract = Abstract.findOne({link: article.link});
+  let categories = Category.find({});
+  let series = Series.find({});
+  [abstract, categories, series] = await Promise.all([abstract, categories, series]);
+  res.render('./upload/upload', {
+    visited: req.visited,
+    article: article,
+    abstract: abstract,
+    categories: categories,
+    series: series,
+  });
+}
 
 exports.tologin = function(req, res) {
-  let visited = req.visited;
   res.render('./admin-login/admin-login', {
-    "visited": visited,
+    visited: req.visited,
     tip: '请输入账号和密码'
   });
 }
 
-
-exports.login = function(req, res) {
-  let visited = req.visited;
-  let login = req.body.login;
-  let name = login.name;
-  let pass = login.pass;
-  if (name === "zhangyuchen" && pass === "123456") {
-    req.session.user = name;
-    Article.find({}, function(err, articles) {
-      if (err) {
-        console.log(err);
-      }
-      res.render('./list/list', {
-        "visited": visited,
-        articles: articles
-      })
-    })
-  } else {
-    res.render('./admin-login/admin-login', {
-      "visited": visited,
-      tip: '输入的密码有误'
-    });
+exports.delete = async function(req, res) {
+  try {
+    let _id = req.query.id;
+    let article = await Article.findById(_id);
+    let abstract = Abstract.findOne({link: article.link});
+    let categories = Category.find({name: article.categories});
+    let series = Series.find({name: article.series});
+    [abstract, categories, series] = await Promise.all([abstract, categories, series]);
+    await Promise.all([article.remove(), abstract.remove(), removeCategories(categories, _id), removeSeries(series, _id)])
+    res.json({success: 1});
+  } catch(e) {
+    console.log(e);
+    res.json({success: 0});
+    // add error process
   }
-};
-
-exports.delete = function(req, res) {
-  let _id = req.query.id;
-  Article.findById(_id, function(err, article) {
-    if (err) {
-      console.log(err);
-    }
-    // 删除该文章
-    article.remove(function(err, article) {
-      Abstract.findOne({link: article.link}, function(err, abstract) {
-        // 删除该简介
-        abstract.remove(function(err, abstract) {
-          // 删除对应分类中文章的信息。
-          let errflag = false;
-          article.categories.forEach(function(cate) {
-            Category.findOne({name: cate}, function(err, category) {
-              // 如果该分类只有一篇文章，则删除该分类
-              if (category.articles.length === 1) {
-                category.remove(function(err, c) {
-                  if (err) {
-                    console.log(err);
-                    errflag = true;
-                  }
-                })
-              } else {
-                // 如果有多篇文章，则删除该文章的信息
-                category.articles.splice(category.articles.indexOf(article._id), 1);
-                category.save(function(err, c) {
-                  if (err) {
-                    console.log(err)
-                    errflag = true;
-                  }
-                })
-              }
-            })
-          })
-          if (!errflag) {
-            res.json({success: 1});
-          }
-        })
-        // 删除对应专题中文章的信息
-        article.series.forEach(function(s) {
-          Series.findOne({name: s}, function(err, series) {
-            //即使该文章是本专题的最后一篇文章，也不删除本专题
-            series.articles.splice(series.articles.indexOf(article._id), 1);
-            series.save(function(err, s) {
-              if (err) {
-                console.log(err);
-              }
-            })
-          })
-        })
-      })
-    })
-  })
 }
+
+async function removeCategories(categories, id) {
+  let promises = categories.map(function(category) {
+    //如果该分类只有一篇文章，则删除该分类
+    if (category.articles.length === 1) {
+      return category.remove()
+    } else {
+      // 如果有多篇文章，则删除该文章的信息
+      category.articles.splice(category.articles.indexOf(id), 1);
+      return category.save();
+    }
+  });
+  return Promise.all(promises);
+}
+
+async function removeSeries(serieses, id) {
+  let promises = serieses.map((series) => {
+    // 即使该文章是本专题的最后一篇文章，也不删除本专题
+    series.articles.splice(series.articles.indexOf(id), 1);
+    return series.save();
+  })
+  return Promise.all(promises);
+}
+
+// exports.delete = function(req, res) {
+//   let _id = req.query.id;
+//   Article.findById(_id, function(err, article) {
+//     if (err) {
+//       console.log(err);
+//     }
+//     // 删除该文章
+//     article.remove(function(err, article) {
+//       Abstract.findOne({link: article.link}, function(err, abstract) {
+//         // 删除该简介
+//         abstract.remove(function(err, abstract) {
+//           // 删除对应分类中文章的信息。
+//           let errflag = false;
+//           article.categories.forEach(function(cate) {
+//             Category.findOne({name: cate}, function(err, category) {
+//               // 如果该分类只有一篇文章，则删除该分类
+//               if (category.articles.length === 1) {
+//                 category.remove(function(err, c) {
+//                   if (err) {
+//                     console.log(err);
+//                     errflag = true;
+//                   }
+//                 })
+//               } else {
+//                 // 如果有多篇文章，则删除该文章的信息
+//                 category.articles.splice(category.articles.indexOf(article._id), 1);
+//                 category.save(function(err, c) {
+//                   if (err) {
+//                     console.log(err)
+//                     errflag = true;
+//                   }
+//                 })
+//               }
+//             })
+//           })
+//           if (!errflag) {
+//             res.json({success: 1});
+//           }
+//         })
+//         // 删除对应专题中文章的信息
+//         article.series.forEach(function(s) {
+//           Series.findOne({name: s}, function(err, series) {
+//             //即使该文章是本专题的最后一篇文章，也不删除本专题
+//             series.articles.splice(series.articles.indexOf(article._id), 1);
+//             series.save(function(err, s) {
+//               if (err) {
+//                 console.log(err);
+//               }
+//             })
+//           })
+//         })
+//       })
+//     })
+//   })
+// }
