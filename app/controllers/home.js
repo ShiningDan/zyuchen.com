@@ -93,6 +93,7 @@ exports.home = async function(req, res) {
       }
     }
   } catch (e) {
+    console.log(e);
     // add error process
   }
 }
@@ -126,6 +127,7 @@ exports.article = async function(req, res) {
       }
     })
   } catch (e) {
+    res.redirect('/');
     // add error process
   }
 }
@@ -183,6 +185,7 @@ exports.archives = async function(req, res) {
       articles: articleArray,
     });
   } catch (e) {
+    res.redirect('/')
     // add error process
   }
 }
@@ -202,6 +205,17 @@ exports.series = async function(req, res) {
       series: series,
     });
   } catch (e) {
+    res.redirect('/')
     // add exception process
+  }
+}
+
+exports.error = async function(req, res) {
+  try {
+    res.render('./error/error', {
+      visited: req.visited,
+    });
+  } catch(e) {
+    res.send('Sorry cant find that!')
   }
 }

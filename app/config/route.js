@@ -19,4 +19,10 @@ module.exports = function(app) {
   app.post('/admin/upload/new', Admin.adminRequire, Cookie.checkll, Upload.save);
   app.post('/admin/login', Cookie.checkll, Admin.login);
   app.get('/admin', Cookie.checkll, Upload.tologin);
+
+  //404 Error
+  app.use(function(req, res, next) {
+    res.status(404);
+    Home.error(req, res);
+  });
 } 

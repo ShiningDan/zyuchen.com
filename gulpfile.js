@@ -39,7 +39,7 @@ gulp.task('imagemin', function () {
 });
 
 gulp.task('default', ['imagemin', 'webp', 'css', 'script', 'browser-sync'], function() {
-  gulp.watch(['./view/**/*.*', './www/*/*.*', './app/**/*.js', './view/output/js/*.js', './app.js'], ['css', 'script', 'bs-delay'])
+  gulp.watch(['./view/**/*.*', './www/**/*.*', './app/**/*.js', './view/output/js/*.js', './app.js'], ['css', 'script', 'bs-delay'])
 });
 
 gulp.task('script', function() {

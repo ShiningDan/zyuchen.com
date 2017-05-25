@@ -31,6 +31,7 @@ exports.login = async function(req, res) {
       });
     }
   } catch (e) {
+    res.redirect('/admin/login');
     // add error process
   }
 }
@@ -50,6 +51,8 @@ exports.adminRequire = async function(req, res, next) {
       res.redirect('/admin/login'); 
     }
   } catch(e) {
+    console.log(e);
+    res.redirect('/admnin/login')
     // add error process
   }
 }

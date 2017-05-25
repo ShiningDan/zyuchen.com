@@ -1,0 +1,21 @@
+extends ../layout/layout
+
+block commonStyle
+  - if (!visited)
+    style#common_css
+      include ../../www/static/css/common-combo.css
+    script ls('common_css', '#{tag}');
+  - else
+    script ll('common_css', false);
+
+block uniqueStyle
+  style#error-style
+    include ../../www/static/css/error-combo.css
+
+block content
+  h1 404 - 什么也没有
+  p 您要找的东西不在哦
+  p 
+    | 请检测 URL 拼写是否有误，或者通过 
+    a(href='/search/') 站内搜索
+    |  搜一下吧~

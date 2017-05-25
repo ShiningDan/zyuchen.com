@@ -22,6 +22,8 @@ exports.upload = async function(req, res) {
       series: series,
     });
   } catch(e) {
+    console.log(e);
+    res.redirect('/admin/list');
     // add error process
   }
 }
@@ -250,6 +252,8 @@ exports.save = async function(req, res) {
       res.redirect(_article.link);
     }
   } catch(e) {
+    console.log(e);
+    res.redirect('/admin/list');
     // add error process
   }
 }
@@ -263,24 +267,31 @@ exports.list = async function(req, res) {
       articles: articles
     })
   } catch(e) {
+    console.log(e);
+    res.redirect('/admin/login');
     // add error process
   }
 }
 
 exports.update = async function(req, res) {
-  let _id = req.params.id;
-  let article = await Article.findById(_id);
-  let abstract = Abstract.findOne({link: article.link});
-  let categories = Category.find({});
-  let series = Series.find({});
-  [abstract, categories, series] = await Promise.all([abstract, categories, series]);
-  res.render('./upload/upload', {
-    visited: req.visited,
-    article: article,
-    abstract: abstract,
-    categories: categories,
-    series: series,
-  });
+  try {
+    let _id = req.params.id;
+    let article = await Article.findById(_id);
+    let abstract = Abstract.findOne({link: article.link});
+    let categories = Category.find({});
+    let series = Series.find({});
+    [abstract, categories, series] = await Promise.all([abstract, categories, series]);
+    res.render('./upload/upload', {
+      visited: req.visited,
+      article: article,
+      abstract: abstract,
+      categories: categories,
+      series: series,
+    });
+  } catch(e) {
+    console.log(e);
+    res.redirect('/admin/list');
+  }
 }
 
 exports.tologin = function(req, res) {
@@ -298,6 +309,7 @@ exports.delete = async function(req, res) {
     await Promise.all([article.remove(), abstract.remove(), removeArticleformCategories(article.categories, _id), removeArticleformSeries(article.series, _id)])
     res.json({success: 1});
   } catch(e) {
+    console.log(e);
     res.json({success: 0});
     // add error process
   }

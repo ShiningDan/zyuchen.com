@@ -38,5 +38,4 @@ app.locals.moment = require('moment');
 
 app.listen(port);
 
-
 require('./app/config/route')(app);
