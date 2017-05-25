@@ -1,0 +1,15 @@
+{
+  "apps": [{
+    "name": "app",
+    "script": "./app.js",
+    "watch": true,
+    "env": {
+      "NODE_ENV": "development",
+      "PORT": 7000
+    },
+    "env_production" : {
+       "NODE_ENV": "production",
+       "PORT": 80
+    }
+  }]
+}
