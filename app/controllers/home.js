@@ -20,6 +20,7 @@ exports.home = async function(req, res) {
         pageNavPn.next = "?gt=" + abstracts[homepageCount-1]._id;
       }
       res.render('./home/home', {
+        pageTitle: 'Yuchen 的主页',
         visited: req.visited,
         tag: req.tag,
         "abstracts": abstracts.slice(0, homepageCount).reverse(),
@@ -36,6 +37,7 @@ exports.home = async function(req, res) {
       if (abstracts.length <= homepageCount) {
         pageNavPn.next = "?gt=" + abstracts[abstracts.length-1]._id;
         res.render('./home/home', {
+          pageTitle: 'Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
           "abstracts": abstracts,
@@ -50,6 +52,7 @@ exports.home = async function(req, res) {
         pageNavPn.prev = "?lt=" + abstracts[1]._id;
         pageNavPn.next = "?gt=" + abstracts[homepageCount]._id;
         res.render('./home/home', {
+          pageTitle: 'Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
           "abstracts": abstracts.slice(1, homepageCount+1),          
@@ -66,6 +69,7 @@ exports.home = async function(req, res) {
       if (abstracts.length <= homepageCount) {
         pageNavPn.prev = "?lt=" + abstracts[0]._id;
         res.render('./home/home', {
+          pageTitle: 'Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
           "abstracts": abstracts,
@@ -80,6 +84,7 @@ exports.home = async function(req, res) {
         pageNavPn.prev = "?lt=" + abstracts[0]._id;
         pageNavPn.next = "?gt=" + abstracts[homepageCount-1]._id;
         res.render('./home/home', {
+          pageTitle: 'Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
           "abstracts": abstracts.slice(0, homepageCount),          
@@ -113,6 +118,7 @@ exports.article = async function(req, res) {
       next: result[0].length === 1 ? result[0][0].link : "",
     };
     res.render('./article/article', {
+      pageTitle: article.title,
       visited: req.visited,
       tag: req.tag,
       content: acceptWebp === true ? article.contentWebp : article.content,
@@ -180,6 +186,7 @@ exports.archives = async function(req, res) {
       }
     }
     res.render('./archives/archives', {
+      pageTitle: '归档 | Yuchen 的主页',
       visited: req.visited,
       tag: req.tag,
       articles: articleArray,
@@ -200,6 +207,7 @@ exports.series = async function(req, res) {
         });
     });
     res.render('./series/series', {
+      pageTitle: '专题 | Yuchen 的主页',
       visited: req.visited,
       tag: req.tag,
       series: series,
@@ -213,6 +221,7 @@ exports.series = async function(req, res) {
 exports.error = async function(req, res) {
   try {
     res.render('./error/error', {
+      pageTitle: '404 | Yuchen 的主页',
       visited: req.visited,
     });
   } catch(e) {

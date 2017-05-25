@@ -15,6 +15,7 @@ exports.upload = async function(req, res) {
     let series = Series.find({});
     [categories, series] = await Promise.all([categories, series]);
     res.render('./upload/upload', {
+      pageTitle: '上传 | Yuchen 的主页',
       visited: req.visited,
       article: {},
       abstract: {},
@@ -263,6 +264,7 @@ exports.list = async function(req, res) {
   try {
     let articles = await Article.find({});
     res.render('./list/list', {
+      pageTitle: '列表 | Yuchen 的主页',
       visited: req.visited,
       articles: articles
     })
@@ -282,6 +284,7 @@ exports.update = async function(req, res) {
     let series = Series.find({});
     [abstract, categories, series] = await Promise.all([abstract, categories, series]);
     res.render('./upload/upload', {
+      pageTitle: '上传 | Yuchen 的主页',
       visited: req.visited,
       article: article,
       abstract: abstract,
@@ -296,6 +299,7 @@ exports.update = async function(req, res) {
 
 exports.tologin = function(req, res) {
   res.render('./admin-login/admin-login', {
+    pageTitle: '登录 | Yuchen 的主页',
     visited: req.visited,
     tip: '请输入账号和密码'
   });

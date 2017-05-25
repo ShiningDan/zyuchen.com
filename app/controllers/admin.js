@@ -12,12 +12,14 @@ exports.login = async function(req, res) {
         req.session.user = name;
         let articles = await Article.find({});
         res.render('./list/list', {
+          pageTitle: '列表 | Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
           articles: articles
         })
       } else {
         res.render('./admin-login/admin-login', {
+          pageTitle: '登录 | Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
           tip: '输入的账号或密码有误'
@@ -25,6 +27,7 @@ exports.login = async function(req, res) {
       }
     } else {
       res.render('./admin-login/admin-login', {
+        pageTitle: '登录 | Yuchen 的主页',
         visited: req.visited,
         tag: req.tag,
         tip: '没有此用户'
