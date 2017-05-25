@@ -6,6 +6,7 @@ let cookieParser = require('cookie-parser');
 let session = require('express-session');                   
 let mongoStore = require('connect-mongo')(session);    
 let favicon = require('serve-favicon');
+let compression = require('compression');
 
 let port = process.env.PORT || 8000;
 let dbUrl = 'mongodb://zyc:blog@127.0.0.1:27017/blog';
@@ -33,6 +34,7 @@ app.use(session({
       collection: 'sessions',
   }),
 }))
+app.use(compression());
 
 app.locals.moment = require('moment');
 
