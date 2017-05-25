@@ -23,6 +23,7 @@ module.exports = function(app) {
   //404 Error
   app.use(function(req, res, next) {
     res.status(404);
+    Cookie.checkll(req, res, next);
     Home.error(req, res);
   });
 } 
