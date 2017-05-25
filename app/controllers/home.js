@@ -22,7 +22,7 @@ exports.home = async function(req, res) {
       res.render('./home/home', {
         visited: req.visited,
         tag: req.tag,
-        "abstracts": abstracts.slice(0, homepageCount),
+        "abstracts": abstracts.slice(0, homepageCount).reverse(),
         "pageNavPn": pageNavPn,
         "pageNav": {
           "prev": pageNavPn.prev === "" ? undefined : "上一页",
