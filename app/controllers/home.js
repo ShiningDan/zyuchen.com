@@ -185,7 +185,6 @@ exports.archives = async function(req, res) {
   } catch (e) {
     // add error process
   }
-  res.redirect('/');
 }
 
 
