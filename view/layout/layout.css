@@ -1,4 +1,4 @@
-html, body, #content-wrap{height: 100%;}
+html, body, #content-wrap{min-height: 100%;}
 * {padding: 0; margin: 0; }
 a {text-decoration: none;}
 a:hover {cursor: pointer;}
