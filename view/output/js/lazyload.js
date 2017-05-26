@@ -9,7 +9,6 @@ window.addEventListener("DOMContentLoaded", function(event) {
     let scrollBottomHeight = scrollTop + innerHeight;
     for (let i = 0; i < lazyloadDOM.length; i++) {
       let dom = lazyloadDOM[i];
-      console.log(1111, lazyloadDOM.length);
       if (dom.offsetTop < scrollBottomHeight + 300) {
         let src = dom.getAttribute('data-src');
         dom.setAttribute('src', src);
