@@ -33,4 +33,5 @@ window.addEventListener("DOMContentLoaded", function(event) {
     }
   };
   document.addEventListener('scroll', onscrollF);
+  onscrollF();
 })
