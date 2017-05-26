@@ -42,7 +42,7 @@ async function pingSpider(article, url) {
   params.ele('param').ele('value').ele('string', 'http://zyuchen.com/');
   params.ele('param').ele('value').ele('string', 'http://zyuchen.com' + article.link);
   params.ele('param').ele('value').ele('string', ' '); // dont have rss
-  return agent.post(url, data.end({pretty: true})).end().then((value) => console.log(url, 'ping complete', value.body));
+  return agent.post(url, data.end({pretty: true})).end().then((value) => console.log(url, 'ping complete', value.text));
 }
 
 async function updateSitemap() {
