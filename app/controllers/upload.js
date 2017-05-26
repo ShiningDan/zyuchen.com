@@ -72,10 +72,10 @@ function handleUploadObj(uploadObj) {
   uploadObj.content = content.replace(reg, function(value, p1, p2) {
     try {
       let imageSize = sizeOf(path.join(__dirname, '../../www/static', p2+'.png'));
-      return '<img' + p1 + 'data-src="' + p2 +'.png" width=' + imageSize.width + ' height='+imageSize.height;
+      return '<img' + p1 + 'data-src="' + p2 +'.png" width=' + imageSize.width + ' height='+imageSize.height + ' alt=' + p2;
     } catch(e) {
       console.log(e);
-      return '<img' + p1 + 'data-src="' + p2 +'.png"';
+      // return '<img' + p1 + 'data-src="' + p2 +'.png"' + ' alt=' + p2;
     }
     
   })

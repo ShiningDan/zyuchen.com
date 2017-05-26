@@ -11,7 +11,9 @@ window.addEventListener("DOMContentLoaded", function(event) {
       let dom = lazyloadDOM[i];
       if (dom.offsetTop < scrollBottomHeight + 300) {
         let src = dom.getAttribute('data-src');
-        dom.setAttribute('src', src);
+        if (src) {
+          dom.setAttribute('src', src);
+        }
         let className = dom.getAttribute('class');
         if (className) {
           className += ' load';
