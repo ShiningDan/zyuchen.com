@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /search
+Disallow: /disqus
+Disallow: /data
+Disallow: *.md
+Allow: /
+Sitemap: http://zyuchen.com/sitemap.xml

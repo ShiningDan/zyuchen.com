@@ -11,6 +11,9 @@ exports.login = async function(req, res) {
       if (user.password === pass) {
         req.session.user = name;
         let articles = await Article.find({});
+        articles.forEach(function(article) {
+          console.log(article.meta);
+        })
         res.render('./list/list', {
           pageTitle: '列表 | Yuchen 的主页',
           visited: req.visited,

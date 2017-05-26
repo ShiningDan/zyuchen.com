@@ -34,7 +34,9 @@ AbstractSchema.pre('save', function(next) {
       this.meta.updateAt = Date.now();
     }
   } else {
+    if (this.meta.updateAt.valueOf()%100000 !== 0) {
       this.meta.updateAt = Date.now();
+    }
   }
   next();
 });

@@ -7,7 +7,9 @@ let markdownToc = require('markdown-toc');
 let underScore = require('underscore');            // 查看 underscore 的使用方法
 let path = require('path');
 let fs = require('fs');
-var sizeOf = require('image-size');
+let sizeOf = require('image-size');
+let xmlbuilder = require('xmlbuilder');
+let moment = require('moment');
 
 exports.upload = async function(req, res) {
   try {
@@ -27,6 +29,48 @@ exports.upload = async function(req, res) {
     res.redirect('/admin/list');
     // add error process
   }
+}
+ 
+async function updateSitemap() {
+  let sitemapPath = path.join(__dirname, '../../www/static/sitemap.xml');
+  fs.access(sitemapPath, (err) => {
+    try {
+      if (err) {
+        console.log(err);
+        var root = xmlbuilder.create('urlset', {version: '1.0', encoding: 'UTF-8'}).att('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+        root.ele('url').ele('loc', 'http://zyuchen.com/archives/').insertAfter('lastmod', moment().format('YYYY-MM-DD')).insertAfter('priority', 0.6);
+        root.ele('url').ele('loc', 'http://zyuchen.com/series/').insertAfter('lastmod', moment().format('YYYY-MM-DD')).insertAfter('priority', 0.6);
+
+        return Article.find({}).then((articles) => {
+          articles.forEach(function(article) {
+            root.ele('url').ele('loc', 'http://zyuchen.com' + article.link).insertAfter('lastmod', moment(article.meta.updateAt).format('YYYY-MM-DD')).insertAfter('priority', 0.6);
+          })
+          fs.writeFile(sitemapPath, root.end({pretty: true}), { flag: 'wx' }, function(err) {
+            if (err) {
+              console.log(err);
+            }
+          })
+        });
+      } else {
+        var root = xmlbuilder.create('urlset', {version: '1.0', encoding: 'UTF-8'}).att('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+        root.ele('url').ele('loc', 'http://zyuchen.com/archives/').insertAfter('lastmod', moment().format('YYYY-MM-DD')).insertAfter('priority', 0.6);
+        root.ele('url').ele('loc', 'http://zyuchen.com/series/').insertAfter('lastmod', moment().format('YYYY-MM-DD')).insertAfter('priority', 0.6);
+
+        return Article.find({}).then((articles) => {
+          articles.forEach(function(article) {
+            root.ele('url').ele('loc', 'http://zyuchen.com' + article.link).insertAfter('lastmod', moment(article.meta.updateAt).format('YYYY-MM-DD')).insertAfter('priority', 0.6);
+          })
+          fs.writeFile(sitemapPath, root.end({pretty: true}), { flag: 'w' }, function(err) {
+            if (err) {
+              console.log(err);
+            }
+          })
+        });
+      }
+    } catch(e) {
+      console.log(e)
+    }
+  });
 }
 
 function handleUploadObj(uploadObj) {
@@ -206,7 +250,7 @@ exports.save = async function(req, res) {
       }
 
       await Promise.all([_article.save(), _abstract.save(), removeArticleformSeries(seriesTmp, id), removeArticleformCategories(categoriesTmp, id), addArticlesToCategories(_article.categories, id), addArticlesToSeries(_article.series, id)]);
-      
+      await updateSitemap();
       res.redirect(_article.link);
     } else {
       // 如果 id 不存在，即该文章是一篇新文章
@@ -250,6 +294,7 @@ exports.save = async function(req, res) {
       }
 
       await Promise.all([_article.save(), _abstract.save(), addArticlesToSeries(_article.series, _article._id), addArticlesToCategories(_article.categories, _article._id)]);
+      await updateSitemap();
       res.redirect(_article.link);
     }
   } catch(e) {
