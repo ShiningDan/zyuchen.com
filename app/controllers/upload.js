@@ -10,6 +10,9 @@ let fs = require('fs');
 let sizeOf = require('image-size');
 let xmlbuilder = require('xmlbuilder');
 let moment = require('moment');
+let Promise = this.Promise || require('promise');
+let agent = require('superagent-promise')(require('superagent'), Promise);
+
 
 exports.upload = async function(req, res) {
   try {
@@ -31,6 +34,17 @@ exports.upload = async function(req, res) {
   }
 }
  
+async function pingSpider(article, url) {
+  let data = xmlbuilder.create('methodCall', {version: '1.0', encoding: 'UTF-8'});
+  data.ele('methodName', 'weblogUpdates.extendedPing');
+  let params = data.ele('params');
+  params.ele('param').ele('value').ele('string', 'Yuchen 的主页');
+  params.ele('param').ele('value').ele('string', 'http://zyuchen.com/');
+  params.ele('param').ele('value').ele('string', 'http://zyuchen.com' + article.link);
+  params.ele('param').ele('value').ele('string', ' '); // dont have rss
+  return agent.post(url, data.end({pretty: true})).end().then((value) => console.log(url, 'ping complete', value.body));
+}
+
 async function updateSitemap() {
   let sitemapPath = path.join(__dirname, '../../www/static/sitemap.xml');
   fs.access(sitemapPath, (err) => {
@@ -250,7 +264,10 @@ exports.save = async function(req, res) {
       }
 
       await Promise.all([_article.save(), _abstract.save(), removeArticleformSeries(seriesTmp, id), removeArticleformCategories(categoriesTmp, id), addArticlesToCategories(_article.categories, id), addArticlesToSeries(_article.series, id)]);
-      await updateSitemap();
+      pingSpider(_article, 'http://rpc.pingomatic.com/');
+      pingSpider(_article, 'http://ping.baidu.com/ping/RPC2');
+      pingSpider(_article, 'http://blogsearch.google.com/ping/RPC2');
+      updateSitemap();
       res.redirect(_article.link);
     } else {
       // 如果 id 不存在，即该文章是一篇新文章
@@ -294,7 +311,10 @@ exports.save = async function(req, res) {
       }
 
       await Promise.all([_article.save(), _abstract.save(), addArticlesToSeries(_article.series, _article._id), addArticlesToCategories(_article.categories, _article._id)]);
-      await updateSitemap();
+      pingSpider(_article, 'http://rpc.pingomatic.com/');
+      pingSpider(_article, 'http://ping.baidu.com/ping/RPC2');
+      pingSpider(_article, 'http://blogsearch.google.com/ping/RPC2');
+      updateSitemap();
       res.redirect(_article.link);
     }
   } catch(e) {
