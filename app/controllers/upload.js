@@ -266,7 +266,7 @@ exports.save = async function(req, res) {
       await Promise.all([_article.save(), _abstract.save(), removeArticleformSeries(seriesTmp, id), removeArticleformCategories(categoriesTmp, id), addArticlesToCategories(_article.categories, id), addArticlesToSeries(_article.series, id)]);
       pingSpider(_article, 'http://rpc.pingomatic.com/');
       pingSpider(_article, 'http://ping.baidu.com/ping/RPC2');
-      pingSpider(_article, 'http://blogsearch.google.com/ping/RPC2');
+      // pingSpider(_article, 'http://blogsearch.google.com/ping/RPC2');
       updateSitemap();
       res.redirect(_article.link);
     } else {
@@ -313,7 +313,7 @@ exports.save = async function(req, res) {
       await Promise.all([_article.save(), _abstract.save(), addArticlesToSeries(_article.series, _article._id), addArticlesToCategories(_article.categories, _article._id)]);
       pingSpider(_article, 'http://rpc.pingomatic.com/');
       pingSpider(_article, 'http://ping.baidu.com/ping/RPC2');
-      pingSpider(_article, 'http://blogsearch.google.com/ping/RPC2');
+      // pingSpider(_article, 'http://blogsearch.google.com/ping/RPC2');
       updateSitemap();
       res.redirect(_article.link);
     }

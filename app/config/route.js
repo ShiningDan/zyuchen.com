@@ -3,12 +3,16 @@ let Upload = require('../controllers/upload');
 let Admin = require('../controllers/admin');
 let Cookie = require('../controllers/cookie');
 
-module.exports = function(app) {
+module.exports = function(app, redis) {
+  function addRedis(req, res, next) {
+    res.redis = redis;
+    next();
+  }
 
-  app.get('/', Cookie.checkll, Home.home);
-  app.get('/archives/', Cookie.checkll, Home.archives);
-  app.get('/series/', Cookie.checkll, Home.series);
-  app.get('/post/:link', Cookie.checkll, Home.article);
+  app.get('/', Cookie.checkll, addRedis, Home.home);
+  app.get('/archives/', Cookie.checkll, addRedis, Home.archives);
+  app.get('/series/', Cookie.checkll, addRedis, Home.series);
+  app.get('/post/:link', Cookie.checkll, addRedis, Home.article);
 
   // admin
   app.get('/admin/upload', Admin.adminRequire, Cookie.checkll, Upload.upload);

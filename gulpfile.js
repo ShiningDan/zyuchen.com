@@ -39,7 +39,7 @@ gulp.task('imagemin', function () {
 });
 
 gulp.task('default', ['imagemin', 'webp', 'css', 'script', 'browser-sync'], function() {
-  gulp.watch(['./view/**/*.*', './app/**/*.js', './view/output/js/*.js', './app.js'], ['css', 'script', 'bs-delay'])
+  gulp.watch(['./view/**/*.*', './app/**/*.js', './view/output/js/*.js', './app.js', './redisFetch.js'], ['css', 'script', 'bs-delay'])
 });
 
 gulp.task('script', function() {
@@ -78,6 +78,20 @@ gulp.task('nodemon',function(cb) {
   let started = false;
   return nodemon({
     script: './app.js',
+    ignore: ['README.md', 'node_modules/**', '.DS_Store'], 
+    env: { 'NODE_ENV': 'development' },
+  }).on('start', function() {
+    if (!started) {
+      cb();
+      started = true;
+    }
+  })
+})
+
+gulp.task('nodemon-redis',function(cb) {
+  let started = false;
+  return nodemon({
+    script: './redisFetch.js',
     ignore: ['README.md', 'node_modules/**', '.DS_Store'], 
     env: { 'NODE_ENV': 'development' },
   }).on('start', function() {

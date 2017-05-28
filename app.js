@@ -6,11 +6,22 @@ let cookieParser = require('cookie-parser');
 let session = require('express-session');                   
 let mongoStore = require('connect-mongo')(session);    
 let favicon = require('serve-favicon');
+let redis = require('redis');
+let bluebird = require('bluebird');
+
 
 let port = process.env.PORT || 8000;
 let dbUrl = 'mongodb://zyc:blog@127.0.0.1:27017/blog';
 mongoose.Promise = global.Promise;
 mongoose.connect(dbUrl);
+
+// connect redis
+bluebird.promisifyAll(redis.RedisClient.prototype);
+bluebird.promisifyAll(redis.Multi.prototype);
+let redisClient = redis.createClient({host : 'localhost', port : 6379});
+redisClient.on("error", function(err) {
+  console.error("Error connecting to redis", err);
+});
 
 let app = express();
 
@@ -35,7 +46,8 @@ app.use(session({
 }))
 
 app.locals.moment = require('moment');
+app.locals.redis = redisClient;
 
 app.listen(port);
 
-require('./app/config/route')(app);
+require('./app/config/route')(app, redisClient);

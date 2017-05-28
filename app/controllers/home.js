@@ -2,7 +2,7 @@ let Abstract = require('../models/abstract');
 let Article = require('../models/article');
 let Series = require('../models/series');
 let utility = require('utility');
-let homepageCount = 5;
+let homepageCount = 3;
 
 
 exports.home = async function(req, res) {
@@ -13,9 +13,13 @@ exports.home = async function(req, res) {
       prev: "",
       next: "",
     };
+    let redis = res.redis;
     
     if (lt === undefined && gt === undefined) {
-      let abstracts = await Abstract.find({}).limit(homepageCount + 1);
+      let abstracts = await redis.lrangeAsync('abstracts', 0, homepageCount).then((values) => values.map((value) => JSON.parse(value)));
+      if (abstracts.length === 0) {
+        abstracts = await Abstract.find({}).limit(homepageCount + 1);
+      }
       if (abstracts.length > homepageCount){
         pageNavPn.next = "?gt=" + abstracts[homepageCount-1]._id;
       }
@@ -23,7 +27,7 @@ exports.home = async function(req, res) {
         pageTitle: 'Yuchen 的主页',
         visited: req.visited,
         tag: req.tag,
-        "abstracts": abstracts.slice(0, homepageCount).reverse(),
+        "abstracts": abstracts.slice(0, homepageCount),
         "pageNavPn": pageNavPn,
         "pageNav": {
           "prev": pageNavPn.prev === "" ? undefined : "上一页",
@@ -108,15 +112,54 @@ exports.article = async function(req, res) {
   try {
     let acceptWebp = req.get('Accept').indexOf('image/webp') === -1 ? false : true,
     link = '/post/' + req.params.link;
-    let article = await Article.findOne({'link': link});
-    let articleNext = Article.find({"_id": {"$gt": article._id}}).limit(1);
-    let articlePrev = Article.find({"_id": {"$lt": article._id}}).sort({"_id": -1}).limit(1);
-    let series = Series.findOne({name: article.series[0]}).limit(10).populate('articles', ['title', 'link', 'meta.createAt']);
-    let result = await Promise.all([articleNext, articlePrev, series]);
-    let pageNavPn = {
-      prev: result[1].length === 1 ? result[1][0].link : "",
-      next: result[0].length === 1 ? result[0][0].link : "",
-    };
+    let redis = res.redis, article, articleNext, articlePrev, series, result, pageNavPn, pageNav;
+
+    let exists = await redis.hexistsAsync('articlesByLink', link);
+    exists = false;
+    if (exists) {
+      result = await redis.multi().hget('articlesByLink', link).lrange('abstracts', 0, 100).lrange('series', 0, 10).execAsync();
+      article = JSON.parse(result[0]);
+      abstracts = result[1].map((abstract) => JSON.parse(abstract));
+      let index;
+      for (let i = 0; i < abstracts.length; i++) {
+        if (abstracts[i].link === link) {
+          index = i
+        }
+      }
+      articleNext = index === result[1].length - 1 ? null : abstracts[index + 1];
+      articlePrev = index === 0 ? null : abstracts[index - 1];
+      for (let i = 0; i < result[2].length; i++) {
+        let s = JSON.parse(result[2][i])
+        if (s.name === article.series[0]) {
+          series = s;
+          break;
+        }
+      }
+      pageNavPn = {
+        prev: articlePrev !== null ? articlePrev.link : "",
+        next: articleNext !== null ? articleNext.link : "",
+      }
+      pageNav = {
+        "prev": pageNavPn.prev === "" ? undefined : articlePrev.title,
+        "next": pageNavPn.next === "" ? undefined : articleNext.title,
+        "center": ""
+      }
+    } else {
+      article = await Article.findOne({'link': link});
+      articleNext = Article.find({"_id": {"$gt": article._id}}).limit(1);
+      articlePrev = Article.find({"_id": {"$lt": article._id}}).sort({"_id": -1}).limit(1);
+      series = Series.findOne({name: article.series[0]}).limit(10).populate('articles', ['title', 'link', 'meta.createAt']);
+      [articleNext, articlePrev, series] = await Promise.all([articleNext, articlePrev, series]);
+      pageNavPn = {
+        prev: articlePrev.length === 1 ? articlePrev[0].link : "",
+        next: articleNext.length === 1 ? articleNext[0].link : "",
+      };
+      pageNav = {
+        "prev": pageNavPn.prev === "" ? undefined : articlePrev[0].title,
+        "next": pageNavPn.next === "" ? undefined : articleNext[0].title,
+        "center": ""
+      }
+    }
     res.render('./article/article', {
       pageTitle: article.title,
       visited: req.visited,
@@ -124,15 +167,12 @@ exports.article = async function(req, res) {
       content: acceptWebp === true ? article.contentWebp : article.content,
       sid: utility.md5(article.link),
       article: article,
-      series: result[2],
+      series: series,
       "pageNavPn": pageNavPn,
-      "pageNav": {
-        "prev": pageNavPn.prev === "" ? undefined : result[1][0].title,
-        "next": pageNavPn.next === "" ? undefined : result[0][0].title,
-        "center": ""
-      }
+      "pageNav": pageNav,
     })
-  } catch (e) {
+  } catch(e) {
+    console.log(e);
     res.redirect('/');
     // add error process
   }
@@ -142,10 +182,15 @@ exports.article = async function(req, res) {
 
 exports.archives = async function(req, res) {
   try {
-    let abstracts = await Abstract.find({});
+    let redis = res.redis;
+    let abstracts = await redis.lrangeAsync('abstracts', 0, 100).then((values) => values.map((value) => JSON.parse(value)));
+    if (abstracts.length === 0) {
+      abstracts = await Abstract.find({});
+    }
+    // let abstracts = await Abstract.find({});  
     let articles = {};
     abstracts.forEach(function(abstract) {
-      let date = abstract.meta.createAt,
+      let date = new Date(abstract.meta.createAt),
       year = date.getFullYear(),
       month = date.getUTCMonth() + 1,
       {link, title} = abstract;
@@ -192,6 +237,7 @@ exports.archives = async function(req, res) {
       articles: articleArray,
     });
   } catch (e) {
+    console.log(e);
     res.redirect('/')
     // add error process
   }
@@ -200,11 +246,24 @@ exports.archives = async function(req, res) {
 
 exports.series = async function(req, res) {
   try {
-    let series = await Series.find({}).populate('articles', ['title', 'link', 'meta.createAt']);
+    let redis = res.redis;
+    let series = await redis.lrangeAsync('series', 0, 100).then((values) => values.map((value) => {
+      let s = JSON.parse(value)
+      s.articles.map((a) => {
+        a.meta.createAt = new Date(a.meta.createAt); 
+        return a;
+      })
+      return s;
+    }));
+    if (series.length === 0) {
+      series = await Series.find({}).populate('articles', ['title', 'link', 'meta.createAt']);
+    }
+    // let series = await Series.find({}).populate('articles', ['title', 'link', 'meta.createAt']);
+
     series.forEach(function(s) {
       s.articles = s.articles.sort(function(a, b) {
-          return b.meta.createAt - a.meta.createAt;
-        });
+        return b.meta.createAt - a.meta.createAt;
+      });
     });
     res.render('./series/series', {
       pageTitle: '专题 | Yuchen 的主页',
@@ -213,6 +272,7 @@ exports.series = async function(req, res) {
       series: series,
     });
   } catch (e) {
+    console.log(e);
     res.redirect('/')
     // add exception process
   }
