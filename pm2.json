@@ -2,7 +2,6 @@
   "apps": [{
     "name": "app",
     "script": "./app.js",
-    "watch": true,
     "error_file" : "/var/log/nodejs/zyuchen-err.log",
     "out_file"   : "/var/log/nodejs/zyuchen-out.log",
     "env": {
@@ -17,7 +16,6 @@
   {
     "name": "redis Fetch",
     "script": "./redisFetch.js",
-    "watch": true,
     "error_file" : "/var/log/nodejs/zyuchen-err.log",
     "out_file"   : "/var/log/nodejs/zyuchen-out.log"
   }]
