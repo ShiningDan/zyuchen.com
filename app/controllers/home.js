@@ -16,9 +16,9 @@ exports.home = async function(req, res) {
     let redis = res.redis;
     
     if (lt === undefined && gt === undefined) {
-      let abstracts = await redis.lrangeAsync('abstracts', 0, homepageCount).then((values) => values.map((value) => JSON.parse(value)));
+      let abstracts = await redis.lrangeAsync('abstracts', 0, 100).then((value) => value.reverse().slice(0, homepageCount + 1)).then((values) => values.map((value) => JSON.parse(value)));
       if (abstracts.length === 0) {
-        abstracts = await Abstract.find({}).limit(homepageCount + 1);
+        abstracts = await Abstract.find({}).sort({"_id": -1}).limit(homepageCount + 1);
       }
       if (abstracts.length > homepageCount){
         pageNavPn.next = "?gt=" + abstracts[homepageCount-1]._id;
@@ -36,8 +36,7 @@ exports.home = async function(req, res) {
         }
       });
     } else if (lt !== undefined) {
-      let abstracts = await Abstract.find({"_id": {"$lt": lt}}).sort({"_id": -1}).limit(homepageCount + 1);
-      abstracts = abstracts.reverse();
+      let abstracts = await Abstract.find({"_id": {"$gt": lt}}).limit(homepageCount + 1).then((value) => value.reverse());
       if (abstracts.length <= homepageCount) {
         pageNavPn.next = "?gt=" + abstracts[abstracts.length-1]._id;
         res.render('./home/home', {
@@ -59,7 +58,7 @@ exports.home = async function(req, res) {
           pageTitle: 'Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
-          "abstracts": abstracts.slice(1, homepageCount+1),          
+          "abstracts": abstracts.slice(1, homepageCount + 1),          
           "pageNavPn": pageNavPn,
           "pageNav": {
             "prev": "上一页",
@@ -69,7 +68,7 @@ exports.home = async function(req, res) {
         });
       }
     } else if (gt !== undefined) {
-      let abstracts = await Abstract.find({"_id": {"$gt": gt}}).limit(homepageCount + 1);
+      let abstracts = await Abstract.find({"_id": {"$lt": gt}}).sort({"_id": -1}).limit(homepageCount + 1);
       if (abstracts.length <= homepageCount) {
         pageNavPn.prev = "?lt=" + abstracts[0]._id;
         res.render('./home/home', {
