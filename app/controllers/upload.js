@@ -216,6 +216,37 @@ async function addArticlesToCategories(categories, id) {
   }
 }
 
+async function fetchFormMongoToRedis(redisClient) {
+  try {
+    let [abstracts, series, articles] = await Promise.all([Abstract.find({}), Series.find({}).populate('articles', ['title', 'link', 'meta.createAt']), Article.find({})])
+  
+    let seriesStrings = series.map((series) => JSON.stringify(series)),
+    abstractsStrings = abstracts.map((abstract) => JSON.stringify(abstract)),
+    articlesStrings = articles.map((article) => {
+      article.md = null;
+      return JSON.stringify(article);
+    });
+    
+    let saveSeries = redisClient.multi().del('series').rpush('series', seriesStrings).execAsync();
+    let saveAbstracts = redisClient.multi().del('abstracts').rpush('abstracts', abstractsStrings).execAsync();
+    // let saveArticles = redisClient.multi().del('articles').rpush('articles', articlesStrings).execAsync();
+    let saveArticlesByLink = redisClient.multi().del('articlesByLink');
+    for (let i = 0; i < articles.length; i++) {
+      saveArticlesByLink.hset('articlesByLink', articles[i].link, articlesStrings[i]);
+    }
+    saveArticlesByLink.execAsync();
+    let saveArticlesById = redisClient.multi().del('articlesById');
+    for (let i = 0; i < articles.length; i++) {
+      saveArticlesById.hset('articlesById', articles[i]._id.toString(), articlesStrings[i]);
+    }
+    saveArticlesById.execAsync();
+
+    await Promise.all([ saveSeries, saveAbstracts, saveArticlesByLink, saveArticlesById]).then((value) => console.log('finish fetch data from mongo to redis: series', value[0][1], ', abstracts', value[1][1], ', articles'));
+  } catch(e) {
+    console.log(e)
+  }
+}
+
 exports.save = async function(req, res) {
   try {
     let uploadObj = req.body.upload,
@@ -266,6 +297,7 @@ exports.save = async function(req, res) {
       await Promise.all([_article.save(), _abstract.save(), removeArticleformSeries(seriesTmp, id), removeArticleformCategories(categoriesTmp, id), addArticlesToCategories(_article.categories, id), addArticlesToSeries(_article.series, id)]);
       pingSpider(_article, 'http://rpc.pingomatic.com/');
       pingSpider(_article, 'http://ping.baidu.com/ping/RPC2');
+      fetchFormMongoToRedis(res.redis);
       // pingSpider(_article, 'http://blogsearch.google.com/ping/RPC2');
       updateSitemap();
       res.redirect(_article.link);
@@ -314,6 +346,7 @@ exports.save = async function(req, res) {
       pingSpider(_article, 'http://rpc.pingomatic.com/');
       pingSpider(_article, 'http://ping.baidu.com/ping/RPC2');
       // pingSpider(_article, 'http://blogsearch.google.com/ping/RPC2');
+      fetchFormMongoToRedis(res.redis);
       updateSitemap();
       res.redirect(_article.link);
     }

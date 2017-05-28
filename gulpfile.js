@@ -88,19 +88,19 @@ gulp.task('nodemon',function(cb) {
   })
 })
 
-gulp.task('nodemon-redis',function(cb) {
-  let started = false;
-  return nodemon({
-    script: './redisFetch.js',
-    ignore: ['README.md', 'node_modules/**', '.DS_Store'], 
-    env: { 'NODE_ENV': 'development' },
-  }).on('start', function() {
-    if (!started) {
-      cb();
-      started = true;
-    }
-  })
-})
+// gulp.task('nodemon-redis',function(cb) {
+//   let started = false;
+//   return nodemon({
+//     script: './redisFetch.js',
+//     ignore: ['README.md', 'node_modules/**', '.DS_Store'], 
+//     env: { 'NODE_ENV': 'development' },
+//   }).on('start', function() {
+//     if (!started) {
+//       cb();
+//       started = true;
+//     }
+//   })
+// })
 
 // gulp.task('connect', function() {
 //   connect.server({            //使用connect启动一个Web服务器

@@ -20,7 +20,7 @@ module.exports = function(app, redis) {
   app.get('/admin/list', Admin.adminRequire, Cookie.checkll, Upload.list);
   app.delete('/admin/list', Admin.adminRequire, Upload.delete);
   app.get('/admin/login', Cookie.checkll, Upload.tologin);
-  app.post('/admin/upload/new', Admin.adminRequire, Cookie.checkll, Upload.save);
+  app.post('/admin/upload/new', Admin.adminRequire, Cookie.checkll, addRedis, Upload.save);
   app.post('/admin/login', Cookie.checkll, Admin.login);
   app.get('/admin', Cookie.checkll, Upload.tologin);
 

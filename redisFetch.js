@@ -16,7 +16,7 @@ bluebird.promisifyAll(redis.Multi.prototype);
  * @param {String} collection 
  * @param {Array} keys 
  */
-async function fetchFormMongoToRedis(redisClient) {
+exports.fetchFormMongoToRedis =  async function fetchFormMongoToRedis(redisClient) {
   try {
     let [abstracts, series, articles] = await Promise.all([Abstract.find({}), Series.find({}).populate('articles', ['title', 'link', 'meta.createAt']), Article.find({})])
   
