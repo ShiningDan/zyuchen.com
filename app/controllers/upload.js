@@ -123,21 +123,40 @@ function handleUploadObj(uploadObj) {
   uploadObj.series = Array.from(seriesSet);
 
   let markdowntocdiv = '<div id="toc"><header>文章目录</header>' + marked(markdownToc(uploadObj.content).content) + '</div>';
-  let content = markdowntocdiv + marked(uploadObj.content);
+  let content = marked(uploadObj.content);
   uploadObj.md = uploadObj.content;
+  let tocreg = /<h(\d)([\s\S]+?)id="([\s\S]+?)"([\s\S]+?)>/g;
+  let tocIndex = 0;
+  content = content.replace(tocreg, function(value, p1, p2, p3, p4) {
+    // console.log(value, p1, p2, p3, p4);
+    tocIndex++;
+    return  '<h' + p1 + p2 + 'id="' + 'toc-' + tocIndex + '"' + p4 + '>';
+  })
+  tocIndex = 0;
+  let tocheader = /<a href="([\s\S]+?)">/g;
+  markdowntocdiv = markdowntocdiv.replace(tocheader, function(value, p1) {
+    tocIndex ++;
+    return '<a href="' + '#toc-' + tocIndex + '">';
+  })
+  content = markdowntocdiv + content;
   // 创建支持 WebP 的 Content 和 非 WebP 的 Content
-  let reg = /<img([\s\S]+?)src\s*="([\s\S]+?).(png)"/g;
-  uploadObj.content = content.replace(reg, function(value, p1, p2) {
+  let reg = /<img([\s\S]+?)src\s*="([\s\S]+?)(.png|.jpg|)"/g, replaceError = false;
+  uploadObj.content = content.replace(reg, function(value, p1, p2, p3) {
     try {
-      let imageSize = sizeOf(path.join(__dirname, '../../www/static', p2+'.png'));
+      let imageSize = sizeOf(path.join(__dirname, '../../www/static', p2+ p3));
       return '<img' + p1 + 'data-src="' + p2 +'.png" width=' + imageSize.width + ' height='+imageSize.height + ' alt=' + p2;
     } catch(e) {
       console.log(e);
-      // return '<img' + p1 + 'data-src="' + p2 +'.png"' + ' alt=' + p2;
+      replaceError = true;
+      return '<img' + p1 + 'data-src="' + p2 + p3 +'"' + ' alt=' + p2;
     }
     
   })
-  uploadObj.contentWebp = uploadObj.content.replace(reg, '<img$1src="$2.webp"');
+  if (replaceError) {
+    uploadObj.contentWebp = uploadObj.content;
+  } else {
+    uploadObj.contentWebp = uploadObj.content.replace(reg, '<img$1src="$2.webp"');    
+  }
 
 }
 

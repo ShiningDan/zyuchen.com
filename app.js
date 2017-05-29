@@ -18,7 +18,10 @@ mongoose.connect(dbUrl);
 // connect redis
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
-let redisClient = redis.createClient({host : 'localhost', port : 6379});
+let redisClient = redis.createClient({
+  host : 'localhost', 
+  port : 6379
+});
 redisClient.on("error", function(err) {
   console.error("Error connecting to redis", err);
 });
@@ -46,7 +49,6 @@ app.use(session({
 }))
 
 app.locals.moment = require('moment');
-app.locals.redis = redisClient;
 
 app.listen(port);
 
