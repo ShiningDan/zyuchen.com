@@ -1,0 +1,22 @@
+extends ../layout/layout
+
+block commonStyle
+  - if (!visited)
+    style#common_css
+      include ../../www/static/css/common-combo.css
+    script ls('common_css', '#{tag}');
+  - else
+    script ll('common_css', false);
+
+block uniqueStyle
+  style#error-style
+    include ../../www/static/css/search-combo.css
+
+block content
+  h1 站内搜索
+  #search
+    form(action='/search', method="get")
+      #search-wrapper
+        #keyword-wrapper
+          input#keyword(type="search", maxlength='80', placeholder="请输入关键字...", name='s', require=true, value= keyword)
+        input#submit(type='submit')

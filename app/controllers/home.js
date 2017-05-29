@@ -102,6 +102,7 @@ exports.home = async function(req, res) {
     }
   } catch (e) {
     console.log(e);
+    res.redirect('/');
     // add error process
   }
 }
@@ -286,4 +287,13 @@ exports.error = async function(req, res) {
   } catch(e) {
     res.send('Sorry cant find that!')
   }
+}
+
+exports.search = async function(req, res) {
+  let s = req.query.s;
+  res.render('./search/search', {
+    pageTitle: '站内搜索',
+    visited: req.visited,
+    keyword: s,
+  })
 }

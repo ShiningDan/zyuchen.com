@@ -11,6 +11,7 @@ module.exports = function(app, redis) {
 
   app.get('/', Cookie.checkll, addRedis, Home.home);
   app.get('/archives/', Cookie.checkll, addRedis, Home.archives);
+  app.get('/search/', Cookie.checkll, Home.search)
   app.get('/series/', Cookie.checkll, addRedis, Home.series);
   app.get('/post/:link', Cookie.checkll, addRedis, Home.article);
 

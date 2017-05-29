@@ -9,12 +9,11 @@ let schedule = require('node-schedule');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
+
 /**
  * 这个函数实现的功能是从 Mongodb 中获取数据，并且发送给 Redis
  * 
- * @param {String} mongUrl 
- * @param {String} collection 
- * @param {Array} keys 
+ * @param {any} redisClient 
  */
 async function fetchFormMongoToRedis(redisClient) {
   try {
