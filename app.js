@@ -8,6 +8,7 @@ let mongoStore = require('connect-mongo')(session);
 let favicon = require('serve-favicon');
 let redis = require('redis');
 let bluebird = require('bluebird');
+let elasticsearch = require('elasticsearch');
 
 
 let port = process.env.PORT || 8000;
@@ -24,6 +25,12 @@ let redisClient = redis.createClient({
 });
 redisClient.on("error", function(err) {
   console.error("Error connecting to redis", err);
+});
+
+//connect elasticsearch
+let esClient = new elasticsearch.Client({
+  host: 'localhost:9200',
+  // log: 'trace',
 });
 
 let app = express();
@@ -52,4 +59,4 @@ app.locals.moment = require('moment');
 
 app.listen(port);
 
-require('./app/config/route')(app, redisClient);
+require('./app/config/route')(app, redisClient, esClient);

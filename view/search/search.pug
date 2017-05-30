@@ -20,3 +20,13 @@ block content
         #keyword-wrapper
           input#keyword(type="search", maxlength='80', placeholder="请输入关键字...", name='s', require=true, value= keyword)
         input#submit(type='submit')
+  if results
+    #searchResult
+      #searchInfo 本次搜索共找到结果 #{info} 条
+      each result in results
+        .searchItem
+          if result.highlight.title
+            a.searchTitle(href= "/post/" + result._source.link) !{result.highlight.title}
+          else 
+            a.searchTitle(href= "/post/" + result._source.link) !{result._source.title}
+          .searchContent !{result.highlight.content.join(' ... ')}

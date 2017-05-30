@@ -138,10 +138,9 @@ function handleUploadObj(uploadObj) {
     tocIndex ++;
     return '<a href="' + '#toc-' + tocIndex + '">';
   })
-  content = markdowntocdiv + content;
   // 创建支持 WebP 的 Content 和 非 WebP 的 Content
   let reg = /<img([\s\S]+?)src\s*="([\s\S]+?)(.png|.jpg|)"/g, replaceError = false;
-  uploadObj.content = content.replace(reg, function(value, p1, p2, p3) {
+  content = content.replace(reg, function(value, p1, p2, p3) {
     try {
       let imageSize = sizeOf(path.join(__dirname, '../../www/static', p2+ p3));
       return '<img' + p1 + 'data-src="' + p2 +'.png" width=' + imageSize.width + ' height='+imageSize.height + ' alt=' + p2;
@@ -150,14 +149,13 @@ function handleUploadObj(uploadObj) {
       replaceError = true;
       return '<img' + p1 + 'data-src="' + p2 + p3 +'"' + ' alt=' + p2;
     }
-    
   })
+  uploadObj.content = markdowntocdiv + content;
   if (replaceError) {
     uploadObj.contentWebp = uploadObj.content;
   } else {
     uploadObj.contentWebp = uploadObj.content.replace(reg, '<img$1src="$2.webp"');    
   }
-
 }
 
 async function removeArticleformCategories(categories, id) {
@@ -319,6 +317,18 @@ exports.save = async function(req, res) {
       fetchFormMongoToRedis(res.redis);
       // pingSpider(_article, 'http://blogsearch.google.com/ping/RPC2');
       updateSitemap();
+      res.es.index({
+        index: 'articles',
+        type: 'article',
+        id: _article.link.slice(6),
+        body: {
+          title: _article.title,
+          content: _article.md,
+          link: _article.link.slice(6),
+          categories: _article.categories,
+          create_data: _article.meta.createAt
+        }
+      });
       res.redirect(_article.link);
     } else {
       // 如果 id 不存在，即该文章是一篇新文章
@@ -367,6 +377,18 @@ exports.save = async function(req, res) {
       // pingSpider(_article, 'http://blogsearch.google.com/ping/RPC2');
       fetchFormMongoToRedis(res.redis);
       updateSitemap();
+      res.es.index({
+        index: 'articles',
+        type: 'article',
+        id: _article.link.slice(6),
+        body: {
+          title: _article.title,
+          content: _article.md,
+          link: _article.link.slice(6),
+          categories: _article.categories,
+          create_data: _article.meta.createAt
+        }
+      });
       res.redirect(_article.link);
     }
   } catch(e) {

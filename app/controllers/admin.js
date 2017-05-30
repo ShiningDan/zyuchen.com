@@ -15,7 +15,7 @@ exports.login = async function(req, res) {
           pageTitle: '列表 | Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
-          articles: articles
+          articles: articles.reverse()
         })
       } else {
         res.render('./admin-login/admin-login', {

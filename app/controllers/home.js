@@ -2,6 +2,7 @@ let Abstract = require('../models/abstract');
 let Article = require('../models/article');
 let Series = require('../models/series');
 let utility = require('utility');
+let removeMd = require('remove-markdown');
 let homepageCount = 3;
 
 
@@ -291,9 +292,92 @@ exports.error = async function(req, res) {
 
 exports.search = async function(req, res) {
   let s = req.query.s;
-  res.render('./search/search', {
-    pageTitle: '站内搜索',
-    visited: req.visited,
-    keyword: s,
-  })
+  let start = 0;
+  if (s) {
+    res.es.search({
+    index : 'articles',
+    type : 'article',
+    from : start,
+    body : {
+      query : { 
+        dis_max : { 
+          queries : [
+            {
+              match : {
+                title : { 
+                  query : s, 
+                  minimum_should_match : '50%',
+                  boost : 4,
+                }
+              } 
+            }, {
+              match : {
+                content : { 
+                  query : s, 
+                  minimum_should_match : '75%',
+                  boost : 4,
+                }
+              } 
+            }, {
+              match : {
+                categories : { 
+                  query : s, 
+                  minimum_should_match : '100%',
+                  boost : 2,
+                }
+              } 
+            }, {
+              match : {
+                link : { 
+                  query : s, 
+                  minimum_should_match : '100%',
+                  boost : 1,
+                }
+              } 
+            }
+          ],
+            tie_breaker : 0.3
+          }
+        },
+        highlight : {
+          pre_tags : ['<b>'],
+          post_tags : ['</b>'],
+          fields : {
+            title : {},
+            content : {},
+          }
+        }
+      }
+    }).then((value) => {
+      let reg = /b([\S]{1,20}?)\/b/g;
+      let moreReg = /!--more--/g
+      value.hits.hits.map((a) => {
+        a.highlight.content = a.highlight.content.map((c) => {
+          c = removeMd(c);
+          c = c.replace(moreReg, () => "");
+          return c.replace(reg, (v, p1) => {
+            // console.log(v, p1);
+            return '<b>'+p1+'</b>';
+          })
+        });
+        
+        // console.log(a.highlight);
+        return a;
+      })
+      
+      res.render('./search/search', {
+        pageTitle: '站内搜索',
+        visited: req.visited,
+        keyword: s,
+        results: value.hits.hits,
+        info: value.hits.total,
+      })
+    });
+  } else {
+    res.render('./search/search', {
+      pageTitle: '站内搜索',
+      visited: req.visited,
+      keyword: s
+    })
+  } 
 }
