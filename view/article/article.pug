@@ -30,13 +30,14 @@ block content
     |」标签，最后修改于
     span.time #{moment(article.meta.updateAt).format('YYYY-MM-DD')}
     | 。
-  h3.series-info 专题「#{article.series[0]}」相关的其他文章
-    a(href='') »
-  ul.series-ul
-    each i in series.articles
-      li 
-        a(href= i.link) #{i.title}
-        span.time (#{moment(i.meta.createAt).format('MMM DD, YYYY')})
+  if series
+    h3.series-info 专题「#{article.series[0]}」相关的其他文章
+      a(href='') »
+    ul.series-ul
+      each i in series.articles
+        li 
+          a(href= i.link) #{i.title}
+          span.time (#{moment(i.meta.createAt).format('MMM DD, YYYY')})
   
 block comment
   //- section#comments

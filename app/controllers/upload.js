@@ -405,7 +405,7 @@ exports.list = async function(req, res) {
     res.render('./list/list', {
       pageTitle: '列表 | Yuchen 的主页',
       visited: req.visited,
-      articles: articles
+      articles: articles.reverse()
     })
   } catch(e) {
     console.log(e);
