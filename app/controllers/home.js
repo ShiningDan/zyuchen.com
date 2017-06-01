@@ -350,7 +350,7 @@ exports.search = async function(req, res) {
       }
     }).then((value) => {
       let reg = /b([\S]{1,20}?)\/b/g;
-      let moreReg = /!--more--/g
+      let moreReg = /!--more--/g;
       value.hits.hits.map((a) => {
         a.highlight.content = a.highlight.content.map((c) => {
           c = removeMd(c);
