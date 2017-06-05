@@ -3,7 +3,7 @@ let Article = require('../models/article');
 let Series = require('../models/series');
 let utility = require('utility');
 let removeMd = require('remove-markdown');
-let homepageCount = 3;
+let homepageCount = 5;
 
 
 exports.home = async function(req, res) {
@@ -161,6 +161,9 @@ exports.article = async function(req, res) {
         "center": ""
       }
     }
+    // pageNav 中 prev 和 next 反了，需要进行替换
+    [pageNavPn.prev, pageNavPn.next] = [pageNavPn.next, pageNavPn.prev];
+    [pageNav.prev, pageNav.next] = [pageNav.next, pageNav.prev];
     res.render('./article/article', {
       pageTitle: article.title,
       visited: req.visited,
