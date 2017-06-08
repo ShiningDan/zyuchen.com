@@ -24,11 +24,12 @@ exports.home = async function(req, res) {
       if (abstracts.length > homepageCount){
         pageNavPn.next = "?gt=" + abstracts[homepageCount-1]._id;
       }
+      abstracts = abstracts.slice(0, homepageCount);
       res.render('./home/home', {
         pageTitle: 'Yuchen 的主页',
         visited: req.visited,
         tag: req.tag,
-        "abstracts": abstracts.slice(0, homepageCount),
+        "abstracts": abstracts,
         "pageNavPn": pageNavPn,
         "pageNav": {
           "prev": pageNavPn.prev === "" ? undefined : "上一页",
@@ -55,11 +56,12 @@ exports.home = async function(req, res) {
       } else {
         pageNavPn.prev = "?lt=" + abstracts[1]._id;
         pageNavPn.next = "?gt=" + abstracts[homepageCount]._id;
+        abstracts = abstracts.slice(1, homepageCount + 1)
         res.render('./home/home', {
           pageTitle: 'Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
-          "abstracts": abstracts.slice(1, homepageCount + 1),          
+          "abstracts": abstracts,          
           "pageNavPn": pageNavPn,
           "pageNav": {
             "prev": "上一页",
@@ -87,11 +89,12 @@ exports.home = async function(req, res) {
       } else {
         pageNavPn.prev = "?lt=" + abstracts[0]._id;
         pageNavPn.next = "?gt=" + abstracts[homepageCount-1]._id;
+        abstracts = abstracts.slice(0, homepageCount);
         res.render('./home/home', {
           pageTitle: 'Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
-          "abstracts": abstracts.slice(0, homepageCount),          
+          "abstracts": abstracts,          
           "pageNavPn": pageNavPn,
           "pageNav": {
             "prev": "上一页",
@@ -116,7 +119,6 @@ exports.article = async function(req, res) {
     let redis = res.redis, article, articleNext, articlePrev, series, result, pageNavPn, pageNav;
 
     let exists = await redis.hexistsAsync('articlesByLink', link);
-    exists = false;
     if (exists) {
       result = await redis.multi().hget('articlesByLink', link).lrange('abstracts', 0, 100).lrange('series', 0, 10).execAsync();
       article = JSON.parse(result[0]);
