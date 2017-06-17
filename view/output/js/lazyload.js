@@ -31,6 +31,9 @@ window.addEventListener("DOMContentLoaded", function(event) {
         break;
       }
     }
+    if (lazyloadDOM.length === 0) {
+      document.removeEventListener('scroll', onscrollF);
+    }
   };
   document.addEventListener('scroll', onscrollF);
   onscrollF();
