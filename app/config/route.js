@@ -2,6 +2,7 @@ let Home = require('../controllers/home');
 let Upload = require('../controllers/upload');
 let Admin = require('../controllers/admin');
 let Cookie = require('../controllers/cookie');
+let Ga = require('../controllers/googleAnalystics');
 
 module.exports = function(app, redis, es) {
   function addRedis(req, res, next) {
@@ -29,6 +30,10 @@ module.exports = function(app, redis, es) {
   app.post('/admin/upload/new', Admin.adminRequire, Cookie.checkll, addRedis, addEs, Upload.save);
   app.post('/admin/login', Cookie.checkll, Admin.login);
   app.get('/admin', Cookie.checkll, Upload.tologin);
+
+  // google analytics
+  app.get('/collect', Ga.ga);
+  app.get('/r/collect', Ga.ga);
 
   //404 Error
   app.use(function(req, res, next) {
