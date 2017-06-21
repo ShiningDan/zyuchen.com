@@ -33,7 +33,7 @@ module.exports = function(app, redis, es) {
 
   // google analytics
   app.get('/collect', Ga.ga);
-  app.get('/r/collect', Ga.ga);
+  app.get('/r/collect', Ga.gar);
 
   //404 Error
   app.use(function(req, res, next) {
