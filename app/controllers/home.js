@@ -29,6 +29,8 @@ exports.home = async function(req, res) {
         pageTitle: 'Yuchen 的主页',
         visited: req.visited,
         tag: req.tag,
+        gav : req.gav,
+        gavTag: req.gavTag,
         "abstracts": abstracts,
         "pageNavPn": pageNavPn,
         "pageNav": {
@@ -45,6 +47,8 @@ exports.home = async function(req, res) {
           pageTitle: 'Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
+          gav : req.gav,
+          gavTag: req.gavTag,
           "abstracts": abstracts,
           "pageNavPn": pageNavPn,
           "pageNav": {
@@ -61,6 +65,8 @@ exports.home = async function(req, res) {
           pageTitle: 'Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
+          gav : req.gav,
+          gavTag: req.gavTag,
           "abstracts": abstracts,          
           "pageNavPn": pageNavPn,
           "pageNav": {
@@ -78,6 +84,8 @@ exports.home = async function(req, res) {
           pageTitle: 'Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
+          gav : req.gav,
+          gavTag: req.gavTag,
           "abstracts": abstracts,
           "pageNavPn": pageNavPn,
           "pageNav": {
@@ -94,6 +102,8 @@ exports.home = async function(req, res) {
           pageTitle: 'Yuchen 的主页',
           visited: req.visited,
           tag: req.tag,
+          gav : req.gav,
+          gavTag: req.gavTag,
           "abstracts": abstracts,          
           "pageNavPn": pageNavPn,
           "pageNav": {
@@ -170,6 +180,8 @@ exports.article = async function(req, res) {
       pageTitle: article.title,
       visited: req.visited,
       tag: req.tag,
+      gav : req.gav,
+      gavTag: req.gavTag,
       content: acceptWebp === true ? article.contentWebp : article.content,
       sid: utility.md5(article.link),
       article: article,
@@ -240,6 +252,8 @@ exports.archives = async function(req, res) {
       pageTitle: '归档 | Yuchen 的主页',
       visited: req.visited,
       tag: req.tag,
+      gav : req.gav,
+      gavTag: req.gavTag,
       articles: articleArray,
     });
   } catch (e) {
@@ -275,6 +289,8 @@ exports.series = async function(req, res) {
       pageTitle: '专题 | Yuchen 的主页',
       visited: req.visited,
       tag: req.tag,
+      gav : req.gav,
+      gavTag: req.gavTag,
       series: series,
     });
   } catch (e) {
@@ -289,6 +305,8 @@ exports.error = async function(req, res) {
     res.render('./error/error', {
       pageTitle: '404 | Yuchen 的主页',
       visited: req.visited,
+      gav : req.gav,
+      gavTag: req.gavTag,
     });
   } catch(e) {
     res.send('Sorry cant find that!')
@@ -373,6 +391,8 @@ exports.search = async function(req, res) {
       res.render('./search/search', {
         pageTitle: '站内搜索',
         visited: req.visited,
+        gav : req.gav,
+        gavTag: req.gavTag,
         keyword: s,
         results: value.hits.hits,
         info: value.hits.total,
@@ -382,6 +402,8 @@ exports.search = async function(req, res) {
     res.render('./search/search', {
       pageTitle: '站内搜索',
       visited: req.visited,
+      gav : req.gav,
+      gavTag: req.gavTag,
       keyword: s
     })
   } 

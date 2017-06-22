@@ -1,8 +1,12 @@
 extends ../layout/layout
 
 block googleAnalystic
-  script(async)
-    include ../../www/static/js/googleAnalystic.js
+  - if (!gav)
+    script#analytics
+      include ../../www/static/js/analytics.js
+    script ls('analytics', '#{gavTag}');
+  - else
+    script ll('analytics', true)
 
 block uniqueStyle
   style

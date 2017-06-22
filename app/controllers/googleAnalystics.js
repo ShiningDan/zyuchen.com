@@ -19,7 +19,7 @@ exports.ga = function(req, res) {
       if (err) {
         console.log(err);
       } else {
-        console.log(data);        
+        // console.log(data);        
       }
     })
   res.end();
@@ -44,7 +44,7 @@ exports.gar = function(req, res) {
       if (err) {
         console.log(err);
       } else {
-        console.log(data);        
+        // console.log(data);        
       }
     })
   res.end();
