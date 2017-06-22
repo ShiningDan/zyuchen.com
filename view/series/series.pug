@@ -4,6 +4,14 @@ block uniqueStyle
   style
     include ../../www/static/css/series-combo.css
 
+block googleAnalystic
+  - if (!gav)
+    script#analytics
+      include ../../www/static/js/analytics.js
+    script ls('analytics', '#{gavTag}');
+  - else
+    script ll('analytics', true)
+
 block commonStyle
   - if (!visited)
     style#common_css
