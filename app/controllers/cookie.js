@@ -6,7 +6,7 @@ let tag = utility.md5(fs.readFileSync(path.join(__dirname, '../../www/static/css
 let gavTag = "1";
 
 exports.checkll = function(req, res, next) {
-  if (req.cookies.v && req.cookies.v === tag) {
+  if (req.cookies.common_css && req.cookies.common_css === tag) {
     req.visited = true;
   } else {
     req.visited = false;
