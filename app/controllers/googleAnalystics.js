@@ -13,13 +13,13 @@ exports.ga = function(req, res) {
   // console.log(req.query);
   // console.log(req.connection.remoteAddress);
   request.get('http://www.google-analytics.com/collect')
-    .query(req.query)
+    .query(query)
     .set(headers)
     .end((err, data) => {
       if (err) {
         console.log(err);
       } else {
-        // console.log(data);        
+        console.log(data);        
       }
     })
   res.end();
@@ -44,7 +44,7 @@ exports.gar = function(req, res) {
       if (err) {
         console.log(err);
       } else {
-        // console.log(data);        
+        console.log(data);        
       }
     })
   res.end();
