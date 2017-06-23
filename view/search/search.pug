@@ -8,6 +8,14 @@ block commonStyle
   - else
     script ll('common_css', false);
 
+block googleAnalystic
+  - if (!gav)
+    script#analytics
+      include ../../www/static/js/analytics.js
+    script ls('analytics', '#{gavTag}');
+  - else
+    script ll('analytics', true)
+
 block uniqueStyle
   style#error-style
     include ../../www/static/css/search-combo.css
