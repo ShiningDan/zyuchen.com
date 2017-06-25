@@ -2,12 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>http://zyuchen.com/archives/</loc>
-    <lastmod>2017-06-20</lastmod>
+    <lastmod>2017-06-25</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>http://zyuchen.com/series/</loc>
-    <lastmod>2017-06-20</lastmod>
+    <lastmod>2017-06-25</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -63,6 +63,11 @@
   <url>
     <loc>http://zyuchen.com/post/blog-react-optimize-statistic-resource</loc>
     <lastmod>2017-06-20</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>http://zyuchen.com/post/google-analytics-proxy</loc>
+    <lastmod>2017-06-25</lastmod>
     <priority>0.6</priority>
   </url>
 </urlset>
